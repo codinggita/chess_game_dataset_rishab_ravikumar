@@ -20,6 +20,55 @@ const matchController = {
     return apiResponse.success(res, 'Match fetched successfully', { match });
   }),
 
+  // @desc    Get match moves
+  // @route   GET /api/v1/matches/:id/moves
+  getMoves: asyncHandler(async (req, res) => {
+    const moves = await matchService.getMatchMoves(req.params.id);
+    return apiResponse.success(res, 'Match moves fetched', { moves });
+  }),
+
+  // @desc    Get match PGN
+  // @route   GET /api/v1/matches/:id/pgn
+  getPGN: asyncHandler(async (req, res) => {
+    const pgn = await matchService.getMatchPGN(req.params.id);
+    return apiResponse.success(res, 'Match PGN fetched', { pgn });
+  }),
+
+  // @desc    Get match FEN
+  // @route   GET /api/v1/matches/:id/fen
+  getFEN: asyncHandler(async (req, res) => {
+    const fen = await matchService.getMatchFEN(req.params.id);
+    return apiResponse.success(res, 'Match FEN fetched', { fen });
+  }),
+
+  // @desc    Get match analysis
+  // @route   GET /api/v1/matches/:id/analysis
+  getAnalysis: asyncHandler(async (req, res) => {
+    const analysis = await matchService.getMatchAnalysis(req.params.id);
+    return apiResponse.success(res, 'Match analysis fetched', { analysis });
+  }),
+
+  // @desc    Get latest matches
+  // @route   GET /api/v1/matches/latest
+  getLatestMatches: asyncHandler(async (req, res) => {
+    const matches = await matchService.getLatestMatches(req.query);
+    return apiResponse.success(res, 'Latest matches fetched', { matches });
+  }),
+
+  // @desc    Get trending matches
+  // @route   GET /api/v1/matches/trending
+  getTrendingMatches: asyncHandler(async (req, res) => {
+    const matches = await matchService.getTrendingMatches(req.query);
+    return apiResponse.success(res, 'Trending matches fetched', { matches });
+  }),
+
+  // @desc    Get random match
+  // @route   GET /api/v1/matches/random
+  getRandomMatch: asyncHandler(async (req, res) => {
+    const match = await matchService.getRandomMatch();
+    return apiResponse.success(res, 'Random match fetched', { match });
+  }),
+
   // @desc    Create new match
   // @route   POST /api/v1/matches
   create: asyncHandler(async (req, res) => {

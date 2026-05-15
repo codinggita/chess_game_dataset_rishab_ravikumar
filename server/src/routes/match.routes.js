@@ -11,6 +11,21 @@ router.get('/', matchController.getAll);
 router.get('/:id', matchController.getById);
 
 /**
+ * Match Sub-resources
+ */
+router.get('/:id/moves', matchController.getMoves);
+router.get('/:id/pgn', matchController.getPGN);
+router.get('/:id/fen', matchController.getFEN);
+router.get('/:id/analysis', matchController.getAnalysis);
+
+/**
+ * Special Queries
+ */
+router.get('/latest', matchController.getLatestMatches);
+router.get('/trending', matchController.getTrendingMatches);
+router.get('/random', matchController.getRandomMatch);
+
+/**
  * Protected Routes
  */
 router.post('/', protect, matchController.create);

@@ -22,13 +22,98 @@ const matchService = {
   },
 
   /**
+   * Get match moves
+   */
+  getMatchMoves: async (matchId) => {
+    const match = await Match.findOne({ id: matchId, isDeleted: false });
+    if (!match) throw new Error('Match not found');
+    return match.moves; // Return the raw moves string
+  },
+
+  /**
+   * Get match PGN (simplified - in reality would convert to proper PGN)
+   */
+  getMatchPGN: async (matchId) => {
+    const match = await Match.findOne({ id: matchId, isDeleted: false });
+    if (!match) throw new Error('Match not found');
+    // For now, return moves as PGN (real implementation would add headers, etc.)
+    return match.moves;
+  },
+
+  /**
+   * Get match FEN (simplified - returns starting position)
+   */
+  getMatchFEN: async (matchId) => {
+    const match = await Match.findOne({ id: matchId, isDeleted: false });
+    if (!match) throw new Error('Match not found');
+    // Return starting FEN position (real implementation would calculate from moves)
+    return "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+  },
+
+  /**
+   * Get match analysis (basic stats)
+   */
+  getMatchAnalysis: async (matchId) => {
+    const match = await Match.findOne({ id: matchId, isDeleted: false });
+    if (!match) throw new Error('Match not found');
+    return {
+      id: match.id,
+      turns: match.turns,
+      winner: match.winner,
+      victoryStatus: match.victory_status,
+      openingName: match.opening_name,
+      openingECO: match.opening_eco,
+      rated: match.rated,
+      whitePlayer: match.white_id,
+      blackPlayer: match.black_id,
+      whiteRating: match.white_rating,
+      blackRating: match.black_rating,
+      incrementCode: match.increment_code,
+      createdAt: match.created_at,
+      lastMoveAt: match.last_move_at
+    };
+  },
+
+  /**
+   * Get latest matches
+   */
+  getLatestMatches: async (filters = {}) => {
+    const query = { ...filters, isDeleted: false };
+    return await Match.find(query)
+      .sort({ createdAt: -1 })
+      .limit(10);
+  },
+
+  /**
+   * Get trending matches (simplified - most recent)
+   */
+  getTrendingMatches: async (filters = {}) => {
+    // In a real implementation, this might consider views, likes, etc.
+    // For now, return most recent matches
+    const query = { ...filters, isDeleted: false };
+    return await Match.find(query)
+      .sort({ createdAt: -1 })
+      .limit(10);
+  },
+
+  /**
+   * Get random match
+   */
+  getRandomMatch: async () => {
+    const count = await Match.countDocuments({ isDeleted: false });
+    if (count === 0) throw new Error('No matches found');
+    const random = Math.floor(Math.random() * count);
+    return await Match.findOne({ isDeleted: false }).skip(random);
+  },
+
+  /**
    * Create new match
    */
   createMatch: async (matchData) => {
     // Check if match ID already exists
     const existing = await Match.findOne({ id: matchData.id });
     if (existing) throw new Error('Match ID already exists');
-    
+
     return await Match.create(matchData);
   },
 
