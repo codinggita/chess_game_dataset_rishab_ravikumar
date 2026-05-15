@@ -46,6 +46,30 @@ const authController = {
     return apiResponse.success(res, 'Logged out successfully');
   }),
 
+  // @desc    Refresh Token
+  // @route   POST /api/v1/auth/refresh
+  refresh: asyncHandler(async (req, res) => {
+    const { refreshToken: receivedToken } = req.body;
+    const { accessToken, refreshToken } = await authService.refreshAccessToken(receivedToken);
+    return apiResponse.success(res, 'Token refreshed successfully', { accessToken, refreshToken });
+  }),
+
+  // @desc    Forgot Password
+  // @route   POST /api/v1/auth/forgot-password
+  forgotPassword: asyncHandler(async (req, res) => {
+    const resetToken = await authService.forgotPassword(req.body.email);
+    // In production, resetToken is sent via email. 
+    // Here we return it in the response for development ease.
+    return apiResponse.success(res, 'Reset token generated', { resetToken });
+  }),
+
+  // @desc    Reset Password
+  // @route   POST /api/v1/auth/reset-password/:token
+  resetPassword: asyncHandler(async (req, res) => {
+    await authService.resetPassword(req.params.token, req.body.password);
+    return apiResponse.success(res, 'Password reset successful');
+  }),
+
   // @desc    Get user profile
   // @route   GET /api/v1/auth/profile
   getProfile: asyncHandler(async (req, res) => {

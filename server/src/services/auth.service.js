@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 const env = require('../config/env');
 const User = require('../models/User');
 
@@ -58,6 +59,51 @@ const authService = {
 
   logout: async (userId) => {
     await User.findByIdAndUpdate(userId, { refreshToken: null });
+  },
+
+  refreshAccessToken: async (receivedRefreshToken) => {
+    if (!receivedRefreshToken) throw new Error('Refresh token is required');
+
+    const decoded = jwt.verify(receivedRefreshToken, env.JWT_REFRESH_SECRET);
+    const user = await User.findById(decoded.userId);
+
+    if (!user || user.refreshToken !== receivedRefreshToken) {
+      throw new Error('Invalid refresh token');
+    }
+
+    const accessToken = generateToken(user._id);
+    const newRefreshToken = generateRefreshToken(user._id);
+
+    user.refreshToken = newRefreshToken;
+    await user.save();
+
+    return { accessToken, refreshToken: newRefreshToken };
+  },
+
+  forgotPassword: async (email) => {
+    const user = await User.findOne({ email });
+    if (!user) throw new Error('User not found');
+
+    const resetToken = crypto.randomBytes(20).toString('hex');
+    user.resetToken = resetToken;
+    user.resetTokenExpiry = Date.now() + 3600000; // 1 hour
+
+    await user.save();
+    return resetToken; // In prod, send this via email
+  },
+
+  resetPassword: async (token, newPassword) => {
+    const user = await User.findOne({
+      resetToken: token,
+      resetTokenExpiry: { $gt: Date.now() }
+    });
+
+    if (!user) throw new Error('Invalid or expired reset token');
+
+    user.password = newPassword;
+    user.resetToken = undefined;
+    user.resetTokenExpiry = undefined;
+    await user.save();
   },
 
   getProfile: async (userId) => {
