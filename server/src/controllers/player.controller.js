@@ -14,6 +14,52 @@ const playerController = {
   getByUsername: asyncHandler(async (req, res) => {
     const player = await playerService.getPlayerByUsername(req.params.username);
     return apiResponse.success(res, 'Player fetched successfully', { player });
+  }),
+
+  getHistory: asyncHandler(async (req, res) => {
+    const matches = await playerService.getPlayerHistory(req.params.username, req.query);
+    return apiResponse.success(res, 'Player history fetched', { matches });
+  }),
+
+  getStats: asyncHandler(async (req, res) => {
+    const stats = await playerService.getPlayerStats(req.params.username);
+    return apiResponse.success(res, 'Player stats fetched', { stats });
+  }),
+
+  getOpenings: asyncHandler(async (req, res) => {
+    const openings = await playerService.getPlayerOpenings(req.params.username);
+    return apiResponse.success(res, 'Player openings fetched', { openings });
+  }),
+
+  getRatingHistory: asyncHandler(async (req, res) => {
+    const history = await playerService.getPlayerRatingHistory(req.params.username);
+    return apiResponse.success(res, 'Player rating history fetched', { history });
+  }),
+
+  getWinRate: asyncHandler(async (req, res) => {
+    const rate = await playerService.getPlayerWinRate(req.params.username);
+    return apiResponse.success(res, 'Player win rate fetched', { rate });
+  }),
+
+  getLossRate: asyncHandler(async (req, res) => {
+    const rate = await playerService.getPlayerLossRate(req.params.username);
+    return apiResponse.success(res, 'Player loss rate fetched', { rate });
+  }),
+
+  getDrawRate: asyncHandler(async (req, res) => {
+    const rate = await playerService.getPlayerDrawRate(req.params.username);
+    return apiResponse.success(res, 'Player draw rate fetched', { rate });
+  }),
+
+  comparePlayers: asyncHandler(async (req, res) => {
+    const comparison = await playerService.comparePlayers(req.params.player1, req.params.player2);
+    return apiResponse.success(res, 'Player comparison fetched', { comparison });
+  }),
+
+  getByRatingRange: asyncHandler(async (req, res) => {
+    const { min, max } = req.query;
+    const players = await playerService.getPlayersByRatingRange(min, max, req.query);
+    return apiResponse.success(res, 'Players fetched by rating range', { players });
   })
 };
 
