@@ -5,11 +5,12 @@ const Match = require('../models/Match');
  */
 const matchService = {
   /**
-   * Get all matches (non-deleted)
+   * Get all matches (non-deleted) with sort & pagination
    */
-  getAllMatches: async (filters = {}) => {
-    const query = { ...filters, isDeleted: false };
-    return await Match.find(query).sort({ createdAt: -1 });
+  getAllMatches: async (filters = {}, sort = { created_at: -1 }, skip = 0, limit = 10) => {
+    const { page, ...dbFilters } = filters;
+    const query = { ...dbFilters, isDeleted: false };
+    return await Match.find(query).sort(sort).skip(skip).limit(limit);
   },
 
   /**
@@ -231,6 +232,50 @@ const matchService = {
     );
 
     return { matchedCount: result.matchedCount, modifiedCount: result.modifiedCount };
+  },
+
+  /**
+   * Shortest matches (by turns ascending via aggregation)
+   */
+  getShortestMatches: async (filters = {}) => {
+    const pipeline = [
+      { $match: { isDeleted: false, turns: { $ne: '', $exists: true }, ...filters } },
+      { $addFields: { turnsInt: { $toInt: '$turns' } } },
+      { $sort: { turnsInt: 1 } },
+      { $limit: 20 }
+    ];
+    return await Match.aggregate(pipeline);
+  },
+
+  /**
+   * Longest matches (by turns descending via aggregation)
+   */
+  getLongestMatches: async (filters = {}) => {
+    const pipeline = [
+      { $match: { isDeleted: false, turns: { $ne: '', $exists: true }, ...filters } },
+      { $addFields: { turnsInt: { $toInt: '$turns' } } },
+      { $sort: { turnsInt: -1 } },
+      { $limit: 20 }
+    ];
+    return await Match.aggregate(pipeline);
+  },
+
+  /**
+   * Cursor-based pagination
+   */
+  getMatchesByCursor: async (cursor, limit = 20) => {
+    const lim = Math.min(100, Math.max(1, parseInt(limit) || 20));
+    const query = cursor ? { isDeleted: false, _id: { $gt: cursor } } : { isDeleted: false };
+    const matches = await Match.find(query).sort({ _id: 1 }).limit(lim);
+    const nextCursor = matches.length === lim ? matches[matches.length - 1]._id : null;
+    return { matches, nextCursor };
+  },
+
+  /**
+   * Infinite scroll (offset-based pagination)
+   */
+  getMatchesInfinite: async (skip = 0, limit = 20) => {
+    return await Match.find({ isDeleted: false }).sort({ created_at: -1 }).skip(skip).limit(limit);
   },
 
   /**

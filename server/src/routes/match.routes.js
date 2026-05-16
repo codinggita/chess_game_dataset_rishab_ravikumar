@@ -26,6 +26,14 @@ router.patch('/bulk/archive', protect, matchController.bulkArchive);
 router.patch('/bulk/restore', protect, matchController.bulkRestore);
 
 /**
+ * Sort & Pagination Routes (before /:id to avoid param capture)
+ */
+router.get('/sort/shortest', matchController.getShortestMatches);
+router.get('/sort/longest', matchController.getLongestMatches);
+router.get('/scroll', matchController.getMatchesByCursor);
+router.get('/infinite', matchController.getMatchesInfinite);
+
+/**
  * Parameterized Routes
  */
 router.get('/:id', matchController.getById);

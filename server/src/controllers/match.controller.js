@@ -1,6 +1,7 @@
 const matchService = require('../services/match.service');
 const apiResponse = require('../utils/apiResponse');
 const asyncHandler = require('../utils/asyncHandler');
+const { paginate, buildSort } = require('../utils/pagination');
 
 /**
  * Match Controller Handlers
@@ -102,11 +103,45 @@ const matchController = {
     return apiResponse.success(res, 'Long games fetched', { matches });
   }),
 
-  // @desc    Get all matches
+  // @desc    Get all matches (with sort & pagination)
   // @route   GET /api/v1/matches
   getAll: asyncHandler(async (req, res) => {
-    const matches = await matchService.getAllMatches(req.query);
-    return apiResponse.success(res, 'Matches fetched successfully', { matches });
+    const { page, limit, sort, ...filters } = req.query;
+    const { skip, meta } = paginate(req.query, page, limit);
+    const sortObj = buildSort(sort);
+    const matches = await matchService.getAllMatches(filters, sortObj, skip, meta.limit);
+    return apiResponse.success(res, 'Matches fetched successfully', { matches }, meta);
+  }),
+
+  // @desc    Get shortest matches (by turns ascending)
+  // @route   GET /api/v1/matches/sort/shortest
+  getShortestMatches: asyncHandler(async (req, res) => {
+    const matches = await matchService.getShortestMatches(req.query);
+    return apiResponse.success(res, 'Shortest matches fetched', { matches });
+  }),
+
+  // @desc    Get longest matches (by turns descending)
+  // @route   GET /api/v1/matches/sort/longest
+  getLongestMatches: asyncHandler(async (req, res) => {
+    const matches = await matchService.getLongestMatches(req.query);
+    return apiResponse.success(res, 'Longest matches fetched', { matches });
+  }),
+
+  // @desc    Cursor-based pagination
+  // @route   GET /api/v1/matches/scroll?cursor=:id
+  getMatchesByCursor: asyncHandler(async (req, res) => {
+    const { cursor, limit } = req.query;
+    const { matches, nextCursor } = await matchService.getMatchesByCursor(cursor, limit);
+    return apiResponse.success(res, 'Matches fetched', { matches, nextCursor });
+  }),
+
+  // @desc    Infinite scroll pagination
+  // @route   GET /api/v1/matches/infinite?page=1
+  getMatchesInfinite: asyncHandler(async (req, res) => {
+    const { page, limit } = req.query;
+    const { skip, meta } = paginate(req.query, page, limit);
+    const matches = await matchService.getMatchesInfinite(skip, meta.limit);
+    return apiResponse.success(res, 'Matches fetched', { matches }, meta);
   }),
 
   // @desc    Get match by ID
