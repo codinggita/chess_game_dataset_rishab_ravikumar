@@ -234,6 +234,123 @@ const matchService = {
   },
 
   /**
+   * Filter by winner
+   */
+  filterByWhiteWins: async (filters = {}) => {
+    const query = { ...filters, isDeleted: false, winner: 'white' };
+    return await Match.find(query).sort({ created_at: -1 }).limit(20);
+  },
+
+  filterByBlackWins: async (filters = {}) => {
+    const query = { ...filters, isDeleted: false, winner: 'black' };
+    return await Match.find(query).sort({ created_at: -1 }).limit(20);
+  },
+
+  filterByDraws: async (filters = {}) => {
+    const query = { ...filters, isDeleted: false, winner: 'draw' };
+    return await Match.find(query).sort({ created_at: -1 }).limit(20);
+  },
+
+  /**
+   * Filter by rated status
+   */
+  filterByRated: async (filters = {}) => {
+    const query = { ...filters, isDeleted: false, rated: 'TRUE' };
+    return await Match.find(query).sort({ created_at: -1 }).limit(20);
+  },
+
+  filterByUnrated: async (filters = {}) => {
+    const query = { ...filters, isDeleted: false, rated: 'FALSE' };
+    return await Match.find(query).sort({ created_at: -1 }).limit(20);
+  },
+
+  /**
+   * Filter by victory status
+   */
+  filterByCheckmates: async (filters = {}) => {
+    const query = { ...filters, isDeleted: false, victory_status: 'mate' };
+    return await Match.find(query).sort({ created_at: -1 }).limit(20);
+  },
+
+  filterByResignations: async (filters = {}) => {
+    const query = { ...filters, isDeleted: false, victory_status: 'resign' };
+    return await Match.find(query).sort({ created_at: -1 }).limit(20);
+  },
+
+  filterByTimeouts: async (filters = {}) => {
+    const query = { ...filters, isDeleted: false, victory_status: 'outoftime' };
+    return await Match.find(query).sort({ created_at: -1 }).limit(20);
+  },
+
+  /**
+   * Filter by time class (derived from increment_code)
+   * Uses aggregation to compute initial seconds numerically.
+   */
+  filterByTimeClass: async (timeClass, filters = {}) => {
+    const timeClassRanges = {
+      bullet:    { $lt: [{ $toInt: { $arrayElemAt: [{ $split: ['$increment_code', '+'] }, 0] } }, 180] },
+      blitz:     { $gte: [{ $toInt: { $arrayElemAt: [{ $split: ['$increment_code', '+'] }, 0] } }, 180], $lt: [{ $toInt: { $arrayElemAt: [{ $split: ['$increment_code', '+'] }, 0] } }, 600] },
+      rapid:     { $gte: [{ $toInt: { $arrayElemAt: [{ $split: ['$increment_code', '+'] }, 0] } }, 600], $lt: [{ $toInt: { $arrayElemAt: [{ $split: ['$increment_code', '+'] }, 0] } }, 1800] },
+      classical: { $gte: [{ $toInt: { $arrayElemAt: [{ $split: ['$increment_code', '+'] }, 0] } }, 1800] }
+    };
+
+    const matchCond = timeClassRanges[timeClass];
+    if (!matchCond) throw new Error(`Invalid time class: ${timeClass}`);
+
+    const pipeline = [
+      { $match: { isDeleted: false, increment_code: { $ne: '', $exists: true }, ...filters } },
+      { $addFields: {
+          initial: { $toInt: { $arrayElemAt: [{ $split: ['$increment_code', '+'] }, 0] } }
+      }},
+      { $match: { initial: matchCond } },
+      { $sort: { created_at: -1 } },
+      { $limit: 20 }
+    ];
+
+    return await Match.aggregate(pipeline);
+  },
+
+  /**
+   * Filter by rating tiers
+   */
+  filterByHighRated: async (filters = {}) => {
+    const query = {
+      ...filters, isDeleted: false,
+      $expr: {
+        $or: [
+          { $gte: [{ $toInt: '$white_rating' }, 2000] },
+          { $gte: [{ $toInt: '$black_rating' }, 2000] }
+        ]
+      }
+    };
+    return await Match.find(query).sort({ created_at: -1 }).limit(20);
+  },
+
+  filterByLowRated: async (filters = {}) => {
+    const query = {
+      ...filters, isDeleted: false,
+      $expr: {
+        $and: [
+          { $lt: [{ $toInt: '$white_rating' }, 1200] },
+          { $lt: [{ $toInt: '$black_rating' }, 1200] }
+        ]
+      }
+    };
+    return await Match.find(query).sort({ created_at: -1 }).limit(20);
+  },
+
+  /**
+   * Filter by game length (turns >= 100)
+   */
+  filterByLongGames: async (filters = {}) => {
+    const query = {
+      ...filters, isDeleted: false,
+      $expr: { $gte: [{ $toInt: '$turns' }, 100] }
+    };
+    return await Match.find(query).sort({ created_at: -1 }).limit(20);
+  },
+
+  /**
    * Soft delete match
    */
   deleteMatch: async (matchId) => {

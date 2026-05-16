@@ -6,6 +6,102 @@ const asyncHandler = require('../utils/asyncHandler');
  * Match Controller Handlers
  */
 const matchController = {
+  // Filter: white-wins / black-wins / draws
+  // @route   GET /api/v1/filters/white-wins
+  filterWhiteWins: asyncHandler(async (req, res) => {
+    const matches = await matchService.filterByWhiteWins(req.query);
+    return apiResponse.success(res, 'White win matches fetched', { matches });
+  }),
+
+  // @route   GET /api/v1/filters/black-wins
+  filterBlackWins: asyncHandler(async (req, res) => {
+    const matches = await matchService.filterByBlackWins(req.query);
+    return apiResponse.success(res, 'Black win matches fetched', { matches });
+  }),
+
+  // @route   GET /api/v1/filters/draws
+  filterDraws: asyncHandler(async (req, res) => {
+    const matches = await matchService.filterByDraws(req.query);
+    return apiResponse.success(res, 'Draw matches fetched', { matches });
+  }),
+
+  // Filter: rated / unrated
+  // @route   GET /api/v1/filters/rated
+  filterRated: asyncHandler(async (req, res) => {
+    const matches = await matchService.filterByRated(req.query);
+    return apiResponse.success(res, 'Rated matches fetched', { matches });
+  }),
+
+  // @route   GET /api/v1/filters/unrated
+  filterUnrated: asyncHandler(async (req, res) => {
+    const matches = await matchService.filterByUnrated(req.query);
+    return apiResponse.success(res, 'Unrated matches fetched', { matches });
+  }),
+
+  // Filter: checkmates / resignations / timeouts
+  // @route   GET /api/v1/filters/checkmates
+  filterCheckmates: asyncHandler(async (req, res) => {
+    const matches = await matchService.filterByCheckmates(req.query);
+    return apiResponse.success(res, 'Checkmate matches fetched', { matches });
+  }),
+
+  // @route   GET /api/v1/filters/resignations
+  filterResignations: asyncHandler(async (req, res) => {
+    const matches = await matchService.filterByResignations(req.query);
+    return apiResponse.success(res, 'Resignation matches fetched', { matches });
+  }),
+
+  // @route   GET /api/v1/filters/timeouts
+  filterTimeouts: asyncHandler(async (req, res) => {
+    const matches = await matchService.filterByTimeouts(req.query);
+    return apiResponse.success(res, 'Timeout matches fetched', { matches });
+  }),
+
+  // Filter: time class
+  // @route   GET /api/v1/filters/bullet
+  filterBullet: asyncHandler(async (req, res) => {
+    const matches = await matchService.filterByTimeClass('bullet', req.query);
+    return apiResponse.success(res, 'Bullet matches fetched', { matches });
+  }),
+
+  // @route   GET /api/v1/filters/blitz
+  filterBlitz: asyncHandler(async (req, res) => {
+    const matches = await matchService.filterByTimeClass('blitz', req.query);
+    return apiResponse.success(res, 'Blitz matches fetched', { matches });
+  }),
+
+  // @route   GET /api/v1/filters/rapid
+  filterRapid: asyncHandler(async (req, res) => {
+    const matches = await matchService.filterByTimeClass('rapid', req.query);
+    return apiResponse.success(res, 'Rapid matches fetched', { matches });
+  }),
+
+  // @route   GET /api/v1/filters/classical
+  filterClassical: asyncHandler(async (req, res) => {
+    const matches = await matchService.filterByTimeClass('classical', req.query);
+    return apiResponse.success(res, 'Classical matches fetched', { matches });
+  }),
+
+  // Filter: high / low rated
+  // @route   GET /api/v1/filters/high-rated
+  filterHighRated: asyncHandler(async (req, res) => {
+    const matches = await matchService.filterByHighRated(req.query);
+    return apiResponse.success(res, 'High rated matches fetched', { matches });
+  }),
+
+  // @route   GET /api/v1/filters/low-rated
+  filterLowRated: asyncHandler(async (req, res) => {
+    const matches = await matchService.filterByLowRated(req.query);
+    return apiResponse.success(res, 'Low rated matches fetched', { matches });
+  }),
+
+  // Filter: long games
+  // @route   GET /api/v1/filters/long-games
+  filterLongGames: asyncHandler(async (req, res) => {
+    const matches = await matchService.filterByLongGames(req.query);
+    return apiResponse.success(res, 'Long games fetched', { matches });
+  }),
+
   // @desc    Get all matches
   // @route   GET /api/v1/matches
   getAll: asyncHandler(async (req, res) => {

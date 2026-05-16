@@ -6,6 +6,7 @@ const rateLimiter = require('./middlewares/rateLimiter.middleware');
 const errorHandler = require('./middlewares/error.middleware');
 const authRoutes = require('./routes/auth.routes');
 const matchRoutes = require('./routes/match.routes');
+const filterRoutes = require('./routes/filter.routes');
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use(rateLimiter);
 // Routes
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/matches', matchRoutes);
+app.use('/api/v1/filters', filterRoutes);
 
 // Basic Route
 app.get('/health', (req, res) => {
