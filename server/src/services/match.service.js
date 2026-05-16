@@ -131,6 +131,109 @@ const matchService = {
   },
 
   /**
+   * Archive match (soft hide)
+   */
+  archiveMatch: async (matchId) => {
+    const match = await Match.findOneAndUpdate(
+      { id: matchId, isDeleted: false, isArchived: false },
+      { isArchived: true },
+      { new: true }
+    );
+    if (!match) throw new Error('Match not found or already archived');
+    return match;
+  },
+
+  /**
+   * Restore match from archive
+   */
+  restoreMatch: async (matchId) => {
+    const match = await Match.findOneAndUpdate(
+      { id: matchId, isDeleted: false, isArchived: true },
+      { isArchived: false },
+      { new: true }
+    );
+    if (!match) throw new Error('Match not found or not archived');
+    return match;
+  },
+
+  /**
+   * Bulk upload matches
+   */
+  bulkUpload: async (matchesData = []) => {
+    if (!matchesData.length) throw new Error('No matches provided');
+
+    let createdCount = 0;
+    const created = [];
+
+    for (const data of matchesData) {
+      const existing = await Match.findOne({ id: data.id });
+      if (existing) continue;
+      const match = await Match.create(data);
+      created.push(match);
+      createdCount++;
+    }
+
+    return { createdCount, matches: created };
+  },
+
+  /**
+   * Bulk update matches by IDs
+   */
+  bulkUpdate: async (ids = [], updateData = {}) => {
+    if (!ids.length) throw new Error('No IDs provided');
+
+    const result = await Match.updateMany(
+      { id: { $in: ids }, isDeleted: false },
+      updateData,
+      { runValidators: true }
+    );
+
+    return { matchedCount: result.matchedCount, modifiedCount: result.modifiedCount };
+  },
+
+  /**
+   * Bulk soft delete matches by IDs
+   */
+  bulkDelete: async (ids = []) => {
+    if (!ids.length) throw new Error('No IDs provided');
+
+    const result = await Match.updateMany(
+      { id: { $in: ids }, isDeleted: false },
+      { isDeleted: true }
+    );
+
+    return { matchedCount: result.matchedCount, modifiedCount: result.modifiedCount };
+  },
+
+  /**
+   * Bulk archive matches by IDs
+   */
+  bulkArchive: async (ids = []) => {
+    if (!ids.length) throw new Error('No IDs provided');
+
+    const result = await Match.updateMany(
+      { id: { $in: ids }, isDeleted: false, isArchived: false },
+      { isArchived: true }
+    );
+
+    return { matchedCount: result.matchedCount, modifiedCount: result.modifiedCount };
+  },
+
+  /**
+   * Bulk restore matches from archive by IDs
+   */
+  bulkRestore: async (ids = []) => {
+    if (!ids.length) throw new Error('No IDs provided');
+
+    const result = await Match.updateMany(
+      { id: { $in: ids }, isDeleted: false, isArchived: true },
+      { isArchived: false }
+    );
+
+    return { matchedCount: result.matchedCount, modifiedCount: result.modifiedCount };
+  },
+
+  /**
    * Soft delete match
    */
   deleteMatch: async (matchId) => {

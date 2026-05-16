@@ -83,6 +83,55 @@ const matchController = {
     return apiResponse.success(res, 'Match updated successfully', { match });
   }),
 
+  // @desc    Archive match
+  // @route   PATCH /api/v1/matches/:id/archive
+  archive: asyncHandler(async (req, res) => {
+    const match = await matchService.archiveMatch(req.params.id);
+    return apiResponse.success(res, 'Match archived successfully', { match });
+  }),
+
+  // @desc    Restore match from archive
+  // @route   PATCH /api/v1/matches/:id/restore
+  restore: asyncHandler(async (req, res) => {
+    const match = await matchService.restoreMatch(req.params.id);
+    return apiResponse.success(res, 'Match restored successfully', { match });
+  }),
+
+  // @desc    Bulk upload matches
+  // @route   POST /api/v1/matches/bulk-upload
+  bulkUpload: asyncHandler(async (req, res) => {
+    const result = await matchService.bulkUpload(req.body.matches);
+    return apiResponse.success(res, 'Bulk upload successful', result, {}, 201);
+  }),
+
+  // @desc    Bulk update matches
+  // @route   PATCH /api/v1/matches/bulk-update
+  bulkUpdate: asyncHandler(async (req, res) => {
+    const result = await matchService.bulkUpdate(req.body.ids, req.body.updateData);
+    return apiResponse.success(res, 'Bulk update successful', result);
+  }),
+
+  // @desc    Bulk delete matches (soft delete)
+  // @route   POST /api/v1/matches/bulk-delete
+  bulkDelete: asyncHandler(async (req, res) => {
+    const result = await matchService.bulkDelete(req.body.ids);
+    return apiResponse.success(res, 'Bulk delete successful', result);
+  }),
+
+  // @desc    Bulk archive matches
+  // @route   PATCH /api/v1/matches/bulk/archive
+  bulkArchive: asyncHandler(async (req, res) => {
+    const result = await matchService.bulkArchive(req.body.ids);
+    return apiResponse.success(res, 'Bulk archive successful', result);
+  }),
+
+  // @desc    Bulk restore matches
+  // @route   PATCH /api/v1/matches/bulk/restore
+  bulkRestore: asyncHandler(async (req, res) => {
+    const result = await matchService.bulkRestore(req.body.ids);
+    return apiResponse.success(res, 'Bulk restore successful', result);
+  }),
+
   // @desc    Delete match
   // @route   DELETE /api/v1/matches/:id
   delete: asyncHandler(async (req, res) => {
