@@ -32,6 +32,52 @@ const openingController = {
     return apiResponse.success(res, 'Openings search results', { openings });
   }),
 
+  getAggressive: asyncHandler(async (req, res) => {
+    const openings = await openingService.getByStyle('aggressive', req.query);
+    return apiResponse.success(res, 'Aggressive openings fetched', { openings });
+  }),
+
+  getDefensive: asyncHandler(async (req, res) => {
+    const openings = await openingService.getByStyle('defensive', req.query);
+    return apiResponse.success(res, 'Defensive openings fetched', { openings });
+  }),
+
+  getGambits: asyncHandler(async (req, res) => {
+    const openings = await openingService.getByStyle('gambit', req.query);
+    return apiResponse.success(res, 'Gambit openings fetched', { openings });
+  }),
+
+  getCheckmates: asyncHandler(async (req, res) => {
+    const openings = await openingService.getCheckmateOpenings(req.query);
+    return apiResponse.success(res, 'Fastest checkmate openings fetched', { openings });
+  }),
+
+  getRare: asyncHandler(async (req, res) => {
+    const openings = await openingService.getRareOpenings(req.query);
+    return apiResponse.success(res, 'Rare openings fetched', { openings });
+  }),
+
+  getWhiteAdvantage: asyncHandler(async (req, res) => {
+    const openings = await openingService.getByAdvantage('white', req.query);
+    return apiResponse.success(res, 'White advantage openings fetched', { openings });
+  }),
+
+  getBlackAdvantage: asyncHandler(async (req, res) => {
+    const openings = await openingService.getByAdvantage('black', req.query);
+    return apiResponse.success(res, 'Black advantage openings fetched', { openings });
+  }),
+
+  getBeginnerFriendly: asyncHandler(async (req, res) => {
+    const openings = await openingService.getByComplexity('beginner', req.query);
+    return apiResponse.success(res, 'Beginner friendly openings fetched', { openings });
+  }),
+
+  getByComplexity: asyncHandler(async (req, res) => {
+    const { level } = req.query;
+    const openings = await openingService.getByComplexity(level, req.query);
+    return apiResponse.success(res, 'Openings by complexity fetched', { openings });
+  }),
+
   getByEco: asyncHandler(async (req, res) => {
     const opening = await openingService.getOpeningByEco(req.params.ecoCode);
     return apiResponse.success(res, 'Opening fetched', { opening });
