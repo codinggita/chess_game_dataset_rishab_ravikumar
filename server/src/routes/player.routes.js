@@ -4,6 +4,9 @@ const playerController = require('../controllers/player.controller');
 const router = express.Router();
 
 router.get('/', playerController.getAll);
+router.get('/top-rated', playerController.getTopRated);
+router.get('/top-active', playerController.getTopActive);
+router.get('/top-winning', playerController.getTopWinning);
 router.get('/rating-range', playerController.getByRatingRange);
 router.get('/compare/:player1/:player2', playerController.comparePlayers);
 router.get('/:username', playerController.getByUsername);

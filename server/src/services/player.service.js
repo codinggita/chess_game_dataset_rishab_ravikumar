@@ -93,6 +93,21 @@ const playerService = {
     };
   },
 
+  getTopRated: async (filters = {}) => {
+    const { page, ...dbFilters } = filters;
+    return await Player.find({ ...dbFilters }).sort({ currentRating: -1 }).limit(20);
+  },
+
+  getTopActive: async (filters = {}) => {
+    const { page, ...dbFilters } = filters;
+    return await Player.find({ ...dbFilters }).sort({ totalGames: -1 }).limit(20);
+  },
+
+  getTopWinning: async (filters = {}) => {
+    const { page, ...dbFilters } = filters;
+    return await Player.find({ ...dbFilters }).sort({ wins: -1 }).limit(20);
+  },
+
   getPlayersByRatingRange: async (min, max, filters = {}) => {
     const { page, min: _min, max: _max, ...dbFilters } = filters;
     const query = { ...dbFilters };

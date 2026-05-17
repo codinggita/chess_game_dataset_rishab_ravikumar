@@ -56,6 +56,21 @@ const playerController = {
     return apiResponse.success(res, 'Player comparison fetched', { comparison });
   }),
 
+  getTopRated: asyncHandler(async (req, res) => {
+    const players = await playerService.getTopRated(req.query);
+    return apiResponse.success(res, 'Top rated players fetched', { players });
+  }),
+
+  getTopActive: asyncHandler(async (req, res) => {
+    const players = await playerService.getTopActive(req.query);
+    return apiResponse.success(res, 'Top active players fetched', { players });
+  }),
+
+  getTopWinning: asyncHandler(async (req, res) => {
+    const players = await playerService.getTopWinning(req.query);
+    return apiResponse.success(res, 'Top winning players fetched', { players });
+  }),
+
   getByRatingRange: asyncHandler(async (req, res) => {
     const { min, max } = req.query;
     const players = await playerService.getPlayersByRatingRange(min, max, req.query);
