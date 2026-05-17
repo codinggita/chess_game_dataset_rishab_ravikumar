@@ -98,6 +98,87 @@ const searchService = {
       { $project: { _id: 0, name: '$_id', count: 1 } }
     ];
     return await Match.aggregate(pipeline);
+  },
+
+  searchAdvanced: async (filters = {}) => {
+    const { page, q, from, to, rating, opening, status, ...dbFilters } = filters;
+    const query = { isDeleted: false, ...dbFilters };
+
+    if (q) {
+      query.$or = [
+        { id: { $regex: q, $options: 'i' } },
+        { white_id: { $regex: q, $options: 'i' } },
+        { black_id: { $regex: q, $options: 'i' } },
+        { opening_name: { $regex: q, $options: 'i' } },
+        { moves: { $regex: q, $options: 'i' } }
+      ];
+    }
+    if (rating) query.$expr = { $or: [{ $gte: [{ $toInt: '$white_rating' }, parseInt(rating)] }, { $gte: [{ $toInt: '$black_rating' }, parseInt(rating)] }] };
+    if (status) query.victory_status = status;
+    if (opening) query.opening_name = { $regex: opening, $options: 'i' };
+
+    const matches = await Match.find(query).sort({ created_at: -1 }).limit(20);
+
+    return { matches, filters: { q, from, to, rating, opening, status } };
+  },
+
+  searchByPlayerRating: async (rating, filters = {}) => {
+    const { page, ...dbFilters } = filters;
+    const ratingNum = parseInt(rating) || 0;
+    const query = {
+      isDeleted: false,
+      $expr: {
+        $or: [
+          { $gte: [{ $toInt: '$white_rating' }, ratingNum] },
+          { $gte: [{ $toInt: '$black_rating' }, ratingNum] }
+        ]
+      },
+      ...dbFilters
+    };
+    return await Match.find(query).sort({ created_at: -1 }).limit(20);
+  },
+
+  searchByDateRange: async (from, to, filters = {}) => {
+    const { page, ...dbFilters } = filters;
+    const query = { isDeleted: false, ...dbFilters };
+
+    if (from || to) {
+      query.$expr = {};
+      const conditions = [];
+      if (from) conditions.push({ $gte: [{ $toLong: { $toDouble: '$created_at' } }, new Date(from).getTime()] });
+      if (to) conditions.push({ $lte: [{ $toLong: { $toDouble: '$created_at' } }, new Date(to).getTime()] });
+      query.$expr = conditions.length === 1 ? conditions[0] : { $and: conditions };
+    }
+
+    return await Match.find(query).sort({ created_at: -1 }).limit(20);
+  },
+
+  searchByOpeningFamily: async (q, filters = {}) => {
+    const { page, ...dbFilters } = filters;
+    const regex = new RegExp(q, 'i');
+    return await Opening.find({ family: regex, ...dbFilters }).sort({ totalGames: -1 }).limit(20);
+  },
+
+  searchCheckmatePatterns: async (q, filters = {}) => {
+    const { page, ...dbFilters } = filters;
+    const query = {
+      isDeleted: false,
+      victory_status: 'mate',
+      ...dbFilters
+    };
+    if (q) query.moves = { $regex: q, $options: 'i' };
+    return await Match.find(query).sort({ created_at: -1 }).limit(20);
+  },
+
+  searchEndgames: async (q, filters = {}) => {
+    const { page, ...dbFilters } = filters;
+    const query = {
+      isDeleted: false,
+      $expr: { $gte: [{ $toInt: '$turns' }, 60] },
+      ...dbFilters
+    };
+    if (q) query.moves = { $regex: q, $options: 'i' };
+    return await Match.find(query).sort({ created_at: -1 }).limit(20);
   }
 };
 

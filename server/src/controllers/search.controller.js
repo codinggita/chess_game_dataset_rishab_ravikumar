@@ -53,6 +53,41 @@ const searchController = {
   getPopular: asyncHandler(async (req, res) => {
     const searches = await searchService.getPopularSearches(req.query);
     return apiResponse.success(res, 'Popular searches fetched', { searches });
+  }),
+
+  searchAdvanced: asyncHandler(async (req, res) => {
+    const results = await searchService.searchAdvanced(req.query);
+    return apiResponse.success(res, 'Advanced search results', results);
+  }),
+
+  searchByPlayerRating: asyncHandler(async (req, res) => {
+    const { rating } = req.query;
+    const matches = await searchService.searchByPlayerRating(rating, req.query);
+    return apiResponse.success(res, 'Player rating search results', { matches });
+  }),
+
+  searchByDateRange: asyncHandler(async (req, res) => {
+    const { from, to } = req.query;
+    const matches = await searchService.searchByDateRange(from, to, req.query);
+    return apiResponse.success(res, 'Date range search results', { matches });
+  }),
+
+  searchByOpeningFamily: asyncHandler(async (req, res) => {
+    const { q } = req.query;
+    const openings = await searchService.searchByOpeningFamily(q, req.query);
+    return apiResponse.success(res, 'Opening family search results', { openings });
+  }),
+
+  searchCheckmatePatterns: asyncHandler(async (req, res) => {
+    const { q } = req.query;
+    const matches = await searchService.searchCheckmatePatterns(q, req.query);
+    return apiResponse.success(res, 'Checkmate pattern search results', { matches });
+  }),
+
+  searchEndgames: asyncHandler(async (req, res) => {
+    const { q } = req.query;
+    const matches = await searchService.searchEndgames(q, req.query);
+    return apiResponse.success(res, 'Endgame search results', { matches });
   })
 };
 
