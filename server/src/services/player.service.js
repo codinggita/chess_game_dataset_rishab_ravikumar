@@ -117,6 +117,14 @@ const playerService = {
       if (max) query.currentRating.$lte = parseInt(max);
     }
     return await Player.find(query).sort({ currentRating: -1 }).limit(20);
+  },
+
+  getRecentMatches: async (username) => {
+    const query = {
+      isDeleted: false,
+      $or: [{ white_id: username }, { black_id: username }]
+    };
+    return await Match.find(query).sort({ created_at: -1 }).limit(10);
   }
 };
 

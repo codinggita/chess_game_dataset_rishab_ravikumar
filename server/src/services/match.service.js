@@ -278,6 +278,18 @@ const matchService = {
     return await Match.find({ isDeleted: false }).sort({ created_at: -1 }).skip(skip).limit(limit);
   },
 
+  getHighestRated: async (filters = {}) => {
+    const { page, ...dbFilters } = filters;
+    const pipeline = [
+      { $match: { isDeleted: false, white_rating: { $ne: '' }, black_rating: { $ne: '' }, ...dbFilters } },
+      { $addFields: { maxRating: { $max: [{ $toInt: '$white_rating' }, { $toInt: '$black_rating' }] } } },
+      { $sort: { maxRating: -1 } },
+      { $limit: 20 },
+      { $project: { id: 1, white_id: 1, black_id: 1, white_rating: 1, black_rating: 1, maxRating: 1, winner: 1, _id: 0 } }
+    ];
+    return await Match.aggregate(pipeline);
+  },
+
   /**
    * Filter by winner
    */
@@ -393,6 +405,19 @@ const matchService = {
       $expr: { $gte: [{ $toInt: '$turns' }, 100] }
     };
     return await Match.find(query).sort({ created_at: -1 }).limit(20);
+  },
+
+  /**
+   * Replace match (full PUT)
+   */
+  replaceMatch: async (matchId, updateData) => {
+    const match = await Match.findOneAndReplace(
+      { id: matchId, isDeleted: false },
+      { ...updateData, isDeleted: false },
+      { new: true, runValidators: true }
+    );
+    if (!match) throw new Error('Match not found');
+    return match;
   },
 
   /**

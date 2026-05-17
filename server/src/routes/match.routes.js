@@ -30,6 +30,7 @@ router.patch('/bulk/restore', protect, matchController.bulkRestore);
  */
 router.get('/sort/shortest', matchController.getShortestMatches);
 router.get('/sort/longest', matchController.getLongestMatches);
+router.get('/sort/highest-rated', matchController.getHighestRated);
 router.get('/scroll', matchController.getMatchesByCursor);
 router.get('/infinite', matchController.getMatchesInfinite);
 
@@ -48,6 +49,7 @@ router.patch('/:id/restore', protect, matchController.restore);
  * Protected Routes
  */
 router.post('/', protect, matchController.create);
+router.put('/:id', protect, matchController.replace);
 router.patch('/:id', protect, matchController.update);
 router.delete('/:id', protect, matchController.delete);
 

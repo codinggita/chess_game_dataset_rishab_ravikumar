@@ -127,6 +127,13 @@ const matchController = {
     return apiResponse.success(res, 'Longest matches fetched', { matches });
   }),
 
+  // @desc    Get highest rated matches
+  // @route   GET /api/v1/matches/sort/highest-rated
+  getHighestRated: asyncHandler(async (req, res) => {
+    const matches = await matchService.getHighestRated(req.query);
+    return apiResponse.success(res, 'Highest rated matches fetched', { matches });
+  }),
+
   // @desc    Cursor-based pagination
   // @route   GET /api/v1/matches/scroll?cursor=:id
   getMatchesByCursor: asyncHandler(async (req, res) => {
@@ -261,6 +268,13 @@ const matchController = {
   bulkRestore: asyncHandler(async (req, res) => {
     const result = await matchService.bulkRestore(req.body.ids);
     return apiResponse.success(res, 'Bulk restore successful', result);
+  }),
+
+  // @desc    Replace match (full PUT)
+  // @route   PUT /api/v1/matches/:id
+  replace: asyncHandler(async (req, res) => {
+    const match = await matchService.replaceMatch(req.params.id, req.body);
+    return apiResponse.success(res, 'Match replaced successfully', { match });
   }),
 
   // @desc    Delete match

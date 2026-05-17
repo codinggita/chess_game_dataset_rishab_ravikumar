@@ -75,6 +75,11 @@ const playerController = {
     const { min, max } = req.query;
     const players = await playerService.getPlayersByRatingRange(min, max, req.query);
     return apiResponse.success(res, 'Players fetched by rating range', { players });
+  }),
+
+  getRecent: asyncHandler(async (req, res) => {
+    const matches = await playerService.getRecentMatches(req.params.username);
+    return apiResponse.success(res, 'Recent matches fetched', { matches });
   })
 };
 

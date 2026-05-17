@@ -17,5 +17,6 @@ router.get('/:username/rating-history', playerController.getRatingHistory);
 router.get('/:username/win-rate', playerController.getWinRate);
 router.get('/:username/loss-rate', playerController.getLossRate);
 router.get('/:username/draw-rate', playerController.getDrawRate);
+router.get('/:username/recent', playerController.getRecent);
 
 module.exports = router;
