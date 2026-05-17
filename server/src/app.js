@@ -9,6 +9,7 @@ const matchRoutes = require('./routes/match.routes');
 const filterRoutes = require('./routes/filter.routes');
 const playerRoutes = require('./routes/player.routes');
 const openingRoutes = require('./routes/opening.routes');
+const searchRoutes = require('./routes/search.routes');
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use('/api/v1/matches', matchRoutes);
 app.use('/api/v1/filters', filterRoutes);
 app.use('/api/v1/players', playerRoutes);
 app.use('/api/v1/openings', openingRoutes);
+app.use('/api/v1/search', searchRoutes);
 
 // Basic Route
 app.get('/health', (req, res) => {
