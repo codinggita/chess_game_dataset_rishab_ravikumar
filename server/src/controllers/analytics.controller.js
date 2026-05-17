@@ -36,6 +36,46 @@ const analyticsController = {
   getLongestGames: asyncHandler(async (req, res) => {
     const data = await analyticsService.getLongestGames();
     return apiResponse.success(res, 'Longest games fetched', { data });
+  }),
+
+  getRatingGapUpsets: asyncHandler(async (req, res) => {
+    const data = await analyticsService.getRatingGapUpsets();
+    return apiResponse.success(res, 'Rating gap upsets fetched', { data });
+  }),
+
+  getCheckmateFrequency: asyncHandler(async (req, res) => {
+    const data = await analyticsService.getCheckmateFrequency();
+    return apiResponse.success(res, 'Checkmate frequency fetched', { data });
+  }),
+
+  getDrawFrequency: asyncHandler(async (req, res) => {
+    const data = await analyticsService.getDrawFrequency();
+    return apiResponse.success(res, 'Draw frequency fetched', { data });
+  }),
+
+  getResignationFrequency: asyncHandler(async (req, res) => {
+    const data = await analyticsService.getResignationFrequency();
+    return apiResponse.success(res, 'Resignation frequency fetched', { data });
+  }),
+
+  getTimeouts: asyncHandler(async (req, res) => {
+    const data = await analyticsService.getTimeouts();
+    return apiResponse.success(res, 'Timeout analytics fetched', { data });
+  }),
+
+  getOpeningSuccess: asyncHandler(async (req, res) => {
+    const data = await analyticsService.getOpeningSuccess();
+    return apiResponse.success(res, 'Opening success analytics fetched', { data });
+  }),
+
+  getPlayerGrowth: asyncHandler(async (req, res) => {
+    const data = await analyticsService.getPlayerGrowth();
+    return apiResponse.success(res, 'Player growth fetched', { data });
+  }),
+
+  getHourlyActivity: asyncHandler(async (req, res) => {
+    const data = await analyticsService.getHourlyActivity();
+    return apiResponse.success(res, 'Hourly activity fetched', { data });
   })
 };
 
