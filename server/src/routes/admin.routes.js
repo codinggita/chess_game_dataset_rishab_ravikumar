@@ -19,5 +19,6 @@ router.put('/matches/:id/restore', adminController.restoreMatch);
 router.get('/logs', adminController.getLogs);
 router.get('/system/health', adminController.getSystemHealth);
 router.delete('/cache/clear', adminController.clearCache);
+router.get('/protected/dashboard', adminController.getProtectedDashboard);
 
 module.exports = router;

@@ -119,6 +119,12 @@ const authService = {
 
   deleteProfile: async (userId) => {
     return await User.findByIdAndDelete(userId);
+  },
+
+  verifyEmail: async (userId) => {
+    const user = await User.findByIdAndUpdate(userId, { emailVerified: true }, { new: true });
+    if (!user) throw new Error('User not found');
+    return user;
   }
 };
 

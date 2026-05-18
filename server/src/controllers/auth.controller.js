@@ -89,6 +89,13 @@ const authController = {
   deleteProfile: asyncHandler(async (req, res) => {
     await authService.deleteProfile(req.user._id);
     return apiResponse.success(res, 'Account deleted successfully');
+  }),
+
+  // @desc    Verify email
+  // @route   POST /api/v1/auth/verify-email
+  verifyEmail: asyncHandler(async (req, res) => {
+    const user = await authService.verifyEmail(req.user._id);
+    return apiResponse.success(res, 'Email verified successfully', { emailVerified: user.emailVerified });
   })
 };
 

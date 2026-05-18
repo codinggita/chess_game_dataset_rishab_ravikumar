@@ -1,7 +1,9 @@
 const User = require('../models/User');
 const Match = require('../models/Match');
+const Player = require('../models/Player');
 const apiResponse = require('../utils/apiResponse');
 const asyncHandler = require('../utils/asyncHandler');
+const matchService = require('../services/match.service');
 
 const protectedController = {
   saveMatch: asyncHandler(async (req, res) => {
@@ -39,6 +41,37 @@ const protectedController = {
     return apiResponse.success(res, 'Profile stats fetched', {
       user,
       stats: { savedMatches: savedCount }
+    });
+  }),
+
+  listMatches: asyncHandler(async (req, res) => {
+    const matches = await matchService.getAllMatches(req.query, {}, 0, 20);
+    return apiResponse.success(res, 'Protected matches fetched', { matches });
+  }),
+
+  createMatch: asyncHandler(async (req, res) => {
+    const match = await matchService.createMatch(req.body);
+    return apiResponse.success(res, 'Match created via protected route', { match }, {}, 201);
+  }),
+
+  updateMatch: asyncHandler(async (req, res) => {
+    const match = await matchService.updateMatch(req.params.id, req.body);
+    return apiResponse.success(res, 'Match updated via protected route', { match });
+  }),
+
+  deleteMatch: asyncHandler(async (req, res) => {
+    await matchService.deleteMatch(req.params.id);
+    return apiResponse.success(res, 'Match deleted via protected route');
+  }),
+
+  getAdminDashboard: asyncHandler(async (req, res) => {
+    const [totalMatches, totalUsers, totalPlayers] = await Promise.all([
+      Match.countDocuments({ isDeleted: false }),
+      User.countDocuments(),
+      Player.countDocuments()
+    ]);
+    return apiResponse.success(res, 'Admin protected dashboard', {
+      totalMatches, totalUsers, totalPlayers
     });
   })
 };

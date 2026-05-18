@@ -98,6 +98,17 @@ const adminController = {
   clearCache: asyncHandler(async (req, res) => {
     logStore.clear();
     return apiResponse.success(res, 'Application cache cleared');
+  }),
+
+  getProtectedDashboard: asyncHandler(async (req, res) => {
+    const [totalMatches, totalUsers, totalPlayers] = await Promise.all([
+      Match.countDocuments({ isDeleted: false }),
+      User.countDocuments(),
+      Player.countDocuments()
+    ]);
+    return apiResponse.success(res, 'Admin protected dashboard', {
+      totalMatches, totalUsers, totalPlayers
+    });
   })
 };
 
