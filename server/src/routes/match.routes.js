@@ -1,8 +1,14 @@
 const express = require('express');
 const matchController = require('../controllers/match.controller');
 const { protect } = require('../middlewares/auth.middleware');
+const { allowedMethods } = require('../utils/options');
 
 const router = express.Router();
+
+/**
+ * OPTIONS - Supported methods
+ */
+router.options('/', allowedMethods(['GET', 'POST']));
 
 /**
  * Public Routes (specific paths before parameterized)
@@ -12,6 +18,10 @@ router.get('/', matchController.getAll);
 /**
  * Special Queries (before /:id to avoid param capture)
  */
+router.options('/latest', allowedMethods(['GET']));
+router.options('/trending', allowedMethods(['GET']));
+router.options('/scroll', allowedMethods(['GET']));
+router.options('/infinite', allowedMethods(['GET']));
 router.get('/latest', matchController.getLatestMatches);
 router.get('/trending', matchController.getTrendingMatches);
 router.get('/random', matchController.getRandomMatch);
@@ -19,6 +29,8 @@ router.get('/random', matchController.getRandomMatch);
 /**
  * Bulk Operations (before /:id to avoid param capture)
  */
+router.options('/bulk-upload', allowedMethods(['POST']));
+router.options('/bulk-delete', allowedMethods(['POST']));
 router.post('/bulk-upload', protect, matchController.bulkUpload);
 router.patch('/bulk-update', protect, matchController.bulkUpdate);
 router.post('/bulk-delete', protect, matchController.bulkDelete);
@@ -37,6 +49,10 @@ router.get('/infinite', matchController.getMatchesInfinite);
 /**
  * Parameterized Routes
  */
+router.options('/:id', allowedMethods(['GET', 'PUT', 'PATCH', 'DELETE']));
+router.options('/:id/moves', allowedMethods(['GET']));
+router.options('/:id/pgn', allowedMethods(['GET']));
+router.options('/:id/analysis', allowedMethods(['GET']));
 router.get('/:id', matchController.getById);
 router.get('/:id/moves', matchController.getMoves);
 router.get('/:id/pgn', matchController.getPGN);
