@@ -10,11 +10,14 @@ router.use(protect, adminOnly);
 router.get('/dashboard', adminController.getDashboard);
 router.get('/users', adminController.listUsers);
 router.get('/users/:id', adminController.getUser);
-router.put('/users/:id/role', adminController.updateUserRole);
-router.put('/users/:id/ban', adminController.banUser);
-router.put('/users/:id/unban', adminController.unbanUser);
+router.patch('/users/:id/role', adminController.updateUserRole);
+router.patch('/users/:id/ban', adminController.banUser);
+router.patch('/users/:id/unban', adminController.unbanUser);
 router.get('/matches/deleted', adminController.getDeletedMatches);
 router.delete('/matches/:id', adminController.softDeleteMatch);
 router.put('/matches/:id/restore', adminController.restoreMatch);
+router.get('/logs', adminController.getLogs);
+router.get('/system/health', adminController.getSystemHealth);
+router.delete('/cache/clear', adminController.clearCache);
 
 module.exports = router;

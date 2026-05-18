@@ -3,6 +3,8 @@ const User = require('../models/User');
 const Player = require('../models/Player');
 const apiResponse = require('../utils/apiResponse');
 const asyncHandler = require('../utils/asyncHandler');
+const logStore = require('../utils/logStore');
+const mongoose = require('mongoose');
 
 const adminController = {
   getDashboard: asyncHandler(async (req, res) => {
@@ -73,6 +75,29 @@ const adminController = {
     ).lean();
     if (!match) return apiResponse.error(res, 'Match not found', null, 404);
     return apiResponse.success(res, 'Match restored', { match });
+  }),
+
+  getLogs: asyncHandler(async (req, res) => {
+    const limit = parseInt(req.query.limit, 10) || 100;
+    const logs = logStore.getAll(limit);
+    return apiResponse.success(res, 'System logs fetched', { logs });
+  }),
+
+  getSystemHealth: asyncHandler(async (req, res) => {
+    const dbState = mongoose.connection.readyState;
+    const states = { 0: 'disconnected', 1: 'connected', 2: 'connecting', 3: 'disconnecting' };
+    return apiResponse.success(res, 'Admin system health', {
+      database: states[dbState] || 'unknown',
+      uptime: process.uptime(),
+      nodeVersion: process.version,
+      environment: process.env.NODE_ENV || 'development',
+      timestamp: new Date().toISOString()
+    });
+  }),
+
+  clearCache: asyncHandler(async (req, res) => {
+    logStore.clear();
+    return apiResponse.success(res, 'Application cache cleared');
   })
 };
 
