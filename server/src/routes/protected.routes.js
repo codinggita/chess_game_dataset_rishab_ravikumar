@@ -6,6 +6,10 @@ const router = express.Router();
 
 router.use(protect);
 
+router.get('/matches', protectedController.listMatches);
+router.post('/matches', protectedController.createMatch);
+router.patch('/matches/:id', protectedController.updateMatch);
+router.delete('/matches/:id', protectedController.deleteMatch);
 router.get('/matches/saved', protectedController.getSavedMatches);
 router.post('/matches/:id/save', protectedController.saveMatch);
 router.delete('/matches/:id/save', protectedController.unsaveMatch);
