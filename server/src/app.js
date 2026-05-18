@@ -28,7 +28,7 @@ app.use(rateLimiter);
 // Routes
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/matches', matchRoutes);
-app.use('/api/v1/filters', filterRoutes);
+app.use('/api/v1/matches/filter', filterRoutes);
 app.use('/api/v1/players', playerRoutes);
 app.use('/api/v1/openings', openingRoutes);
 app.use('/api/v1/search', searchRoutes);
