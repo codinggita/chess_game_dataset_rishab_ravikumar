@@ -14,6 +14,7 @@ const analyticsRoutes = require('./routes/analytics.routes');
 const statsRoutes = require('./routes/stats.routes');
 const adminRoutes = require('./routes/admin.routes');
 const systemRoutes = require('./routes/system.routes');
+const protectedRoutes = require('./routes/protected.routes');
 
 const app = express();
 
@@ -35,6 +36,7 @@ app.use('/api/v1/analytics', analyticsRoutes);
 app.use('/api/v1/stats', statsRoutes);
 app.use('/api/v1/admin', adminRoutes);
 app.use('/api/v1/system', systemRoutes);
+app.use('/api/v1/protected', protectedRoutes);
 
 // Basic Route
 app.get('/health', (req, res) => {

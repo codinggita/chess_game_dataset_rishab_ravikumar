@@ -33,6 +33,10 @@ const userSchema = new mongoose.Schema(
     refreshToken: {
       type: String,
     },
+    savedMatches: [{
+      matchId: { type: String },
+      savedAt: { type: Date, default: Date.now }
+    }],
     emailVerified: {
       type: Boolean,
       default: false,
