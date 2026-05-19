@@ -8,8 +8,13 @@ const matchService = {
    * Get all matches (non-deleted) with sort & pagination
    */
   getAllMatches: async (filters = {}, sort = { created_at: -1 }, skip = 0, limit = 10) => {
+    const allowedFields = ['isDeleted', 'rated', 'winner', 'victory_status', 'increment_code', 'white_id', 'black_id', 'opening_name', 'opening_eco', 'turns', 'white_rating', 'black_rating'];
     const { page, ...dbFilters } = filters;
-    const query = { ...dbFilters, isDeleted: false };
+    const cleanFilters = {};
+    for (const key of allowedFields) {
+      if (dbFilters[key] !== undefined) cleanFilters[key] = dbFilters[key];
+    }
+    const query = { ...cleanFilters, isDeleted: false };
     return await Match.find(query).sort(sort).skip(skip).limit(limit);
   },
 
@@ -101,10 +106,8 @@ const matchService = {
    * Get random match
    */
   getRandomMatch: async () => {
-    const count = await Match.countDocuments({ isDeleted: false });
-    if (count === 0) return null;
-    const random = Math.floor(Math.random() * count);
-    return await Match.findOne({ isDeleted: false }).skip(random);
+    const result = await Match.aggregate([{ $match: { isDeleted: false } }, { $sample: { size: 1 } }]);
+    return result[0] || null;
   },
 
   /**
@@ -345,10 +348,10 @@ const matchService = {
    */
   filterByTimeClass: async (timeClass, filters = {}) => {
     const timeClassRanges = {
-      bullet:    { $lt: [{ $toInt: { $arrayElemAt: [{ $split: ['$increment_code', '+'] }, 0] } }, 180] },
-      blitz:     { $gte: [{ $toInt: { $arrayElemAt: [{ $split: ['$increment_code', '+'] }, 0] } }, 180], $lt: [{ $toInt: { $arrayElemAt: [{ $split: ['$increment_code', '+'] }, 0] } }, 600] },
-      rapid:     { $gte: [{ $toInt: { $arrayElemAt: [{ $split: ['$increment_code', '+'] }, 0] } }, 600], $lt: [{ $toInt: { $arrayElemAt: [{ $split: ['$increment_code', '+'] }, 0] } }, 1800] },
-      classical: { $gte: [{ $toInt: { $arrayElemAt: [{ $split: ['$increment_code', '+'] }, 0] } }, 1800] }
+      bullet:    { $lt: 180 },
+      blitz:     { $gte: 180, $lt: 600 },
+      rapid:     { $gte: 600, $lt: 1800 },
+      classical: { $gte: 1800 }
     };
 
     const matchCond = timeClassRanges[timeClass];

@@ -1,6 +1,5 @@
 const express = require('express');
 const cors = require('cors');
-const morgan = require('morgan');
 const logger = require('./middlewares/logger.middleware');
 const rateLimiter = require('./middlewares/rateLimiter.middleware');
 const errorHandler = require('./middlewares/error.middleware');
@@ -22,14 +21,13 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(morgan('dev'));
 app.use(logger);
 app.use(rateLimiter);
 
 // Routes
 app.use('/api/v1/auth', authRoutes);
-app.use('/api/v1/matches', matchRoutes);
 app.use('/api/v1/matches/filter', filterRoutes);
+app.use('/api/v1/matches', matchRoutes);
 app.use('/api/v1/players', playerRoutes);
 app.use('/api/v1/openings', openingRoutes);
 app.use('/api/v1/search', searchRoutes);
