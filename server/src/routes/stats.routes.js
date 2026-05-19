@@ -1,8 +1,10 @@
 const express = require('express');
 const statsController = require('../controllers/stats.controller');
+const { allowedMethods } = require('../utils/options');
 
 const router = express.Router();
 
+router.options('/total-matches', allowedMethods(['GET']));
 router.get('/total-matches', statsController.getTotalMatches);
 router.get('/total-players', statsController.getTotalPlayers);
 router.get('/average-rating', statsController.getAverageRating);

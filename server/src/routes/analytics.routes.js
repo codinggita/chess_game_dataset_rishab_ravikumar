@@ -1,8 +1,10 @@
 const express = require('express');
 const analyticsController = require('../controllers/analytics.controller');
+const { allowedMethods } = require('../utils/options');
 
 const router = express.Router();
 
+router.options('/victory-distribution', allowedMethods(['GET']));
 router.get('/victory-distribution', analyticsController.getVictoryDistribution);
 router.get('/color-advantage', analyticsController.getColorAdvantage);
 router.get('/turn-count-average', analyticsController.getTurnCountAverage);

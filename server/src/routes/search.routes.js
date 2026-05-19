@@ -1,8 +1,13 @@
 const express = require('express');
 const searchController = require('../controllers/search.controller');
+const { allowedMethods } = require('../utils/options');
 
 const router = express.Router();
 
+router.options('/matches', allowedMethods(['GET']));
+router.options('/players', allowedMethods(['GET']));
+router.options('/openings', allowedMethods(['GET']));
+router.options('/advanced', allowedMethods(['GET']));
 router.get('/matches', searchController.searchMatches);
 router.get('/players', searchController.searchPlayers);
 router.get('/openings', searchController.searchOpenings);
