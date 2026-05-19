@@ -14,7 +14,6 @@ router.options('/register', allowedMethods(['POST']));
 router.options('/profile', allowedMethods(['GET', 'PATCH', 'DELETE']));
 router.post('/register', authController.register);
 router.post('/login', authController.login);
-router.post('/refresh', authController.refresh);
 router.post('/refresh-token', authController.refresh);
 router.post('/forgot-password', authController.forgotPassword);
 router.post('/reset-password/:token', authController.resetPassword);

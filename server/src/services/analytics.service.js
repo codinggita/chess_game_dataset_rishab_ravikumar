@@ -13,7 +13,7 @@ const analyticsService = {
 
   getColorAdvantage: async () => {
     const pipeline = [
-      { $match: { isDeleted: false, winner: { $ne: 'draw', $ne: '', $exists: true } } },
+      { $match: { isDeleted: false, winner: { $nin: ['draw', ''], $exists: true } } },
       { $group: { _id: '$winner', count: { $sum: 1 } } },
       { $project: { _id: 0, color: '$_id', count: 1 } }
     ];
@@ -127,8 +127,8 @@ const analyticsService = {
     const pipeline = [
       { $match: { isDeleted: false, created_at: { $ne: '', $exists: true } } },
       { $addFields: { createdDate: { $toDate: { $toLong: { $toDouble: '$created_at' } } } } },
-      { $group: { _id: { year: { $year: '$createdDate' }, month: { $month: '$createdDate' } }, newPlayers: { $addToSet: '$white_id' } } },
-      { $addFields: { playerCount: { $size: '$newPlayers' } } },
+      { $group: { _id: { year: { $year: '$createdDate' }, month: { $month: '$createdDate' } }, newPlayers: { $addToSet: '$white_id' }, newBlackPlayers: { $addToSet: '$black_id' } } },
+      { $addFields: { playerCount: { $size: { $setUnion: ['$newPlayers', '$newBlackPlayers'] } } } },
       { $sort: { '_id.year': 1, '_id.month': 1 } },
       { $project: { _id: 0, year: '$_id.year', month: '$_id.month', playerCount: 1 } }
     ];
