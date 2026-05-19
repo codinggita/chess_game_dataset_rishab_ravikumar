@@ -25,6 +25,7 @@ const openingService = {
   },
 
   searchOpenings: async (q, filters = {}) => {
+    if (!q) return [];
     const { page, ...dbFilters } = filters;
     const query = {
       ...dbFilters,

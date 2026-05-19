@@ -102,7 +102,7 @@ const matchService = {
    */
   getRandomMatch: async () => {
     const count = await Match.countDocuments({ isDeleted: false });
-    if (count === 0) throw new Error('No matches found');
+    if (count === 0) return null;
     const random = Math.floor(Math.random() * count);
     return await Match.findOne({ isDeleted: false }).skip(random);
   },
