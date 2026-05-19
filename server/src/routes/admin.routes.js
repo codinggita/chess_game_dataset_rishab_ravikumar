@@ -2,11 +2,14 @@ const express = require('express');
 const adminController = require('../controllers/admin.controller');
 const { protect } = require('../middlewares/auth.middleware');
 const { adminOnly } = require('../middlewares/admin.middleware');
+const { allowedMethods } = require('../utils/options');
 
 const router = express.Router();
 
 router.use(protect, adminOnly);
 
+router.options('/users', allowedMethods(['GET']));
+router.options('/system/health', allowedMethods(['GET']));
 router.get('/dashboard', adminController.getDashboard);
 router.get('/users', adminController.listUsers);
 router.get('/users/:id', adminController.getUser);
