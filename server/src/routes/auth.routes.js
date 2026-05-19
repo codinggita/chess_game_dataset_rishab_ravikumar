@@ -2,6 +2,7 @@ const express = require('express');
 const authController = require('../controllers/auth.controller');
 const { protect } = require('../middlewares/auth.middleware');
 const { allowedMethods } = require('../utils/options');
+const { headOk } = require('../utils/head');
 
 const router = express.Router();
 
@@ -23,6 +24,7 @@ router.post('/reset-password/:token', authController.resetPassword);
  */
 router.post('/logout', protect, authController.logout);
 router.post('/verify-email', protect, authController.verifyEmail);
+router.head('/profile', protect, headOk);
 router.get('/profile', protect, authController.getProfile);
 router.patch('/profile', protect, authController.updateProfile);
 router.delete('/profile', protect, authController.deleteProfile);

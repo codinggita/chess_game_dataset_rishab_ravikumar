@@ -1,11 +1,14 @@
 const express = require('express');
 const matchController = require('../controllers/match.controller');
 const { allowedMethods } = require('../utils/options');
+const { headOk } = require('../utils/head');
 
 const router = express.Router();
 
 router.options('/blitz', allowedMethods(['GET']));
 router.options('/checkmates', allowedMethods(['GET']));
+router.head('/blitz', headOk);
+router.head('/checkmates', headOk);
 
 router.get('/white-wins', matchController.filterWhiteWins);
 router.get('/black-wins', matchController.filterBlackWins);

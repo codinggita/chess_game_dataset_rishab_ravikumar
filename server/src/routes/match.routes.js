@@ -2,6 +2,8 @@ const express = require('express');
 const matchController = require('../controllers/match.controller');
 const { protect } = require('../middlewares/auth.middleware');
 const { allowedMethods } = require('../utils/options');
+const { headExists, headOk } = require('../utils/head');
+const Match = require('../models/Match');
 
 const router = express.Router();
 
@@ -9,6 +11,11 @@ const router = express.Router();
  * OPTIONS - Supported methods
  */
 router.options('/', allowedMethods(['GET', 'POST']));
+
+/**
+ * HEAD - Resource existence checks
+ */
+router.head('/', headOk);
 
 /**
  * Public Routes (specific paths before parameterized)
@@ -20,6 +27,8 @@ router.get('/', matchController.getAll);
  */
 router.options('/latest', allowedMethods(['GET']));
 router.options('/trending', allowedMethods(['GET']));
+router.head('/latest', headOk);
+router.head('/trending', headOk);
 router.options('/scroll', allowedMethods(['GET']));
 router.options('/infinite', allowedMethods(['GET']));
 router.get('/latest', matchController.getLatestMatches);
@@ -53,6 +62,10 @@ router.options('/:id', allowedMethods(['GET', 'PUT', 'PATCH', 'DELETE']));
 router.options('/:id/moves', allowedMethods(['GET']));
 router.options('/:id/pgn', allowedMethods(['GET']));
 router.options('/:id/analysis', allowedMethods(['GET']));
+router.head('/:id', headExists(Match, req => ({ id: req.params.id, isDeleted: false })));
+router.head('/:id/pgn', headExists(Match, req => ({ id: req.params.id, isDeleted: false })));
+router.head('/:id/fen', headExists(Match, req => ({ id: req.params.id, isDeleted: false })));
+router.head('/:id/analysis', headExists(Match, req => ({ id: req.params.id, isDeleted: false })));
 router.get('/:id', matchController.getById);
 router.get('/:id/moves', matchController.getMoves);
 router.get('/:id/pgn', matchController.getPGN);
