@@ -1,6 +1,7 @@
 const express = require('express');
 const systemController = require('../controllers/system.controller');
 const { allowedMethods } = require('../utils/options');
+const { headOk } = require('../utils/head');
 
 const router = express.Router();
 
@@ -8,6 +9,8 @@ router.options('/status', allowedMethods(['GET']));
 router.options('/restart', allowedMethods(['POST']));
 router.options('/database/status', allowedMethods(['GET']));
 router.options('/cache/status', allowedMethods(['GET']));
+router.head('/status', headOk);
+router.head('/database/status', headOk);
 router.get('/info', systemController.getInfo);
 router.get('/health', systemController.getHealth);
 router.get('/config', systemController.getConfig);

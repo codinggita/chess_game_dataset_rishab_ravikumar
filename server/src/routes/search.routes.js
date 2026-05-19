@@ -1,10 +1,14 @@
 const express = require('express');
 const searchController = require('../controllers/search.controller');
 const { allowedMethods } = require('../utils/options');
+const { headOk } = require('../utils/head');
 
 const router = express.Router();
 
 router.options('/matches', allowedMethods(['GET']));
+router.head('/matches', headOk);
+router.head('/players', headOk);
+router.head('/autocomplete', headOk);
 router.options('/players', allowedMethods(['GET']));
 router.options('/openings', allowedMethods(['GET']));
 router.options('/advanced', allowedMethods(['GET']));

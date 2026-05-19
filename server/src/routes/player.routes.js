@@ -1,12 +1,17 @@
 const express = require('express');
 const playerController = require('../controllers/player.controller');
 const { allowedMethods } = require('../utils/options');
+const { headExists, headOk } = require('../utils/head');
+const Match = require('../models/Match');
 
 const router = express.Router();
 
 router.options('/', allowedMethods(['GET']));
+router.head('/', headOk);
 router.options('/:username', allowedMethods(['GET']));
 router.options('/:username/stats', allowedMethods(['GET']));
+router.head('/:username', headExists(Match, req => ({ $or: [{ white_id: req.params.username }, { black_id: req.params.username }] })));
+router.head('/:username/stats', headExists(Match, req => ({ $or: [{ white_id: req.params.username }, { black_id: req.params.username }] })));
 router.get('/', playerController.getAll);
 router.get('/top-rated', playerController.getTopRated);
 router.get('/top-active', playerController.getTopActive);

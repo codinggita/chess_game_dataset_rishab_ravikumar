@@ -1,10 +1,12 @@
 const express = require('express');
 const analyticsController = require('../controllers/analytics.controller');
 const { allowedMethods } = require('../utils/options');
+const { headOk } = require('../utils/head');
 
 const router = express.Router();
 
 router.options('/victory-distribution', allowedMethods(['GET']));
+router.head('/victory-distribution', headOk);
 router.get('/victory-distribution', analyticsController.getVictoryDistribution);
 router.get('/color-advantage', analyticsController.getColorAdvantage);
 router.get('/turn-count-average', analyticsController.getTurnCountAverage);

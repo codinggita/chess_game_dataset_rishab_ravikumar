@@ -1,11 +1,16 @@
 const express = require('express');
 const openingController = require('../controllers/opening.controller');
 const { allowedMethods } = require('../utils/options');
+const { headExists, headOk } = require('../utils/head');
+const Match = require('../models/Match');
 
 const router = express.Router();
 
 router.options('/', allowedMethods(['GET']));
 router.options('/eco/:ecoCode', allowedMethods(['GET']));
+router.head('/', headOk);
+router.head('/popular', headOk);
+router.head('/eco/:ecoCode', headExists(Match, req => ({ opening_eco: req.params.ecoCode })));
 router.get('/', openingController.getAll);
 router.get('/popular', openingController.getPopular);
 router.get('/trending', openingController.getTrending);
