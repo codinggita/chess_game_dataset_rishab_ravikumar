@@ -1,8 +1,11 @@
 const express = require('express');
 const openingController = require('../controllers/opening.controller');
+const { allowedMethods } = require('../utils/options');
 
 const router = express.Router();
 
+router.options('/', allowedMethods(['GET']));
+router.options('/eco/:ecoCode', allowedMethods(['GET']));
 router.get('/', openingController.getAll);
 router.get('/popular', openingController.getPopular);
 router.get('/trending', openingController.getTrending);

@@ -1,8 +1,12 @@
 const express = require('express');
 const playerController = require('../controllers/player.controller');
+const { allowedMethods } = require('../utils/options');
 
 const router = express.Router();
 
+router.options('/', allowedMethods(['GET']));
+router.options('/:username', allowedMethods(['GET']));
+router.options('/:username/stats', allowedMethods(['GET']));
 router.get('/', playerController.getAll);
 router.get('/top-rated', playerController.getTopRated);
 router.get('/top-active', playerController.getTopActive);
