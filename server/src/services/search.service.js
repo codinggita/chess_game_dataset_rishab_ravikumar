@@ -4,6 +4,7 @@ const Opening = require('../models/Opening');
 
 const searchService = {
   searchMatches: async (q, filters = {}) => {
+    if (!q) return [];
     const { page, ...dbFilters } = filters;
     const query = {
       isDeleted: false,
@@ -22,6 +23,7 @@ const searchService = {
   },
 
   searchPlayers: async (q, filters = {}) => {
+    if (!q) return [];
     const { page, ...dbFilters } = filters;
     const query = {
       ...dbFilters,
@@ -33,6 +35,7 @@ const searchService = {
   },
 
   searchOpenings: async (q, filters = {}) => {
+    if (!q) return [];
     const { page, ...dbFilters } = filters;
     const query = {
       ...dbFilters,
@@ -46,12 +49,14 @@ const searchService = {
   },
 
   searchEco: async (q, filters = {}) => {
+    if (!q) return [];
     const { page, ...dbFilters } = filters;
     const query = { eco: { $regex: q, $options: 'i' }, ...dbFilters };
     return await Opening.find(query).sort({ totalGames: -1 }).limit(20);
   },
 
   searchMoves: async (q, filters = {}) => {
+    if (!q) return [];
     const { page, ...dbFilters } = filters;
     const query = {
       isDeleted: false,

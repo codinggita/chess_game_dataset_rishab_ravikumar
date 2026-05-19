@@ -26,6 +26,9 @@ const generateRefreshToken = (userId) => {
  */
 const authService = {
   register: async (userData) => {
+    const existing = await User.findOne({ email: userData.email });
+    if (existing) throw new Error('Email already in use');
+
     const user = await User.create(userData);
     const accessToken = generateToken(user._id);
     const refreshToken = generateRefreshToken(user._id);
