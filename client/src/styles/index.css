@@ -1,5 +1,8 @@
 @import 'tailwindcss';
 @import './theme-dark.css' layer(theme);
+@import './base.css';
+@import './chess-texture.css';
+@import './animations.css';
 
 /* ── Tailwind 4 Theme Configuration ──
    Maps design tokens to Tailwind utility classes.

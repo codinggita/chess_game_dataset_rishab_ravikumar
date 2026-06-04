@@ -1,0 +1,54 @@
+/* ───────────────────────────────────────────────
+   ChessIQ Analytics — Base Styles & Reset
+   ─────────────────────────────────────────────── */
+
+/* ── HTML Reset ── */
+html {
+  background: var(--color-bg-base);
+  color: var(--color-text-primary);
+  font-family: var(--font-family-ui);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Scrollbar Styling ── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-accent-gold);
+  border-radius: var(--radius-sm);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent-gold-hover);
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-accent-gold) transparent;
+}
+
+/* ── Text Selection ── */
+::selection {
+  background: var(--color-accent-gold);
+  color: var(--color-bg-base);
+}
+
+/* ── Focus Ring (accessible) ── */
+:focus-visible {
+  outline: 2px solid var(--color-accent-gold);
+  outline-offset: 2px;
+}

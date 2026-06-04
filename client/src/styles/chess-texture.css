@@ -1,0 +1,38 @@
+/* ───────────────────────────────────────────────
+   ChessIQ Analytics — Chess Board Textures
+   Repeating 32×32px board pattern overlays
+   ─────────────────────────────────────────────── */
+
+/* Main pattern — full background, 0.4 opacity */
+.chess-bg {
+  position: relative;
+}
+
+.chess-bg::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(45deg, rgba(201, 168, 76, 0.04) 25%, transparent 25%),
+    linear-gradient(-45deg, rgba(201, 168, 76, 0.04) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, rgba(201, 168, 76, 0.04) 75%),
+    linear-gradient(-45deg, transparent 75%, rgba(201, 168, 76, 0.04) 75%);
+  background-size: 32px 32px;
+  background-position:
+    0 0,
+    0 16px,
+    16px -16px,
+    -16px 0;
+  pointer-events: none;
+}
+
+/* Auth variant — subtler, 0.15 opacity */
+.chess-bg-auth::before {
+  opacity: 0.4;
+  background-image:
+    linear-gradient(45deg, rgba(201, 168, 76, 0.015) 25%, transparent 25%),
+    linear-gradient(-45deg, rgba(201, 168, 76, 0.015) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, rgba(201, 168, 76, 0.015) 75%),
+    linear-gradient(-45deg, transparent 75%, rgba(201, 168, 76, 0.015) 75%);
+}
