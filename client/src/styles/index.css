@@ -1,1 +1,50 @@
 @import 'tailwindcss';
+@import './theme-dark.css' layer(theme);
+
+/* ── Tailwind 4 Theme Configuration ──
+   Maps design tokens to Tailwind utility classes.
+   Also generates CSS variables on :root for var() usage. */
+@theme {
+  /* ── Colors ── */
+  --color-bg-base: var(--color-bg-base);
+  --color-bg-surface: var(--color-bg-surface);
+  --color-bg-elevated: var(--color-bg-elevated);
+  --color-bg-hover: var(--color-bg-hover);
+  --color-border-subtle: var(--color-border-subtle);
+  --color-border-default: var(--color-border-default);
+  --color-text-primary: var(--color-text-primary);
+  --color-text-secondary: var(--color-text-secondary);
+  --color-text-tertiary: var(--color-text-tertiary);
+  --color-accent-gold: var(--color-accent-gold);
+  --color-accent-gold-hover: var(--color-accent-gold-hover);
+  --color-success-green: var(--color-success-green);
+  --color-error-red: var(--color-error-red);
+  --color-warning-amber: var(--color-warning-amber);
+  --color-info-blue: var(--color-info-blue);
+  --color-draw-blue: var(--color-draw-blue);
+
+  /* ── Font Families ── */
+  --font-family-ui: var(--font-family-ui);
+  --font-family-mono: var(--font-family-mono);
+  --font-family-display: var(--font-family-display);
+
+  /* ── Border Radius ── */
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+
+  /* ── Spacing Scale (Tailwind overrides) ── */
+  --spacing-1: 2px;
+  --spacing-2: 4px;
+  --spacing-3: 8px;
+  --spacing-4: 12px;
+  --spacing-5: 16px;
+  --spacing-6: 20px;
+  --spacing-7: 24px;
+  --spacing-8: 32px;
+  --spacing-9: 40px;
+  --spacing-10: 48px;
+  --spacing-11: 56px;
+  --spacing-12: 64px;
+}
