@@ -9,11 +9,20 @@ import {
   Spinner,
   Modal,
   showToast,
+  Pagination,
+  Tabs,
+  Breadcrumb,
+  Toggle,
+  Select,
 } from './components/ui';
 
 function App() {
   const [modalOpen, setModalOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [page, setPage] = useState(1);
+  const [tab, setTab] = useState('matches');
+  const [toggleVal, setToggleVal] = useState(false);
+  const [selectVal, setSelectVal] = useState('');
 
   return (
     <div className="chess-bg min-h-screen bg-bg-base p-8">
@@ -21,10 +30,7 @@ function App() {
         <h1 className="font-display text-3xl font-bold text-text-primary">ChessIQ Analytics</h1>
 
         {/* ── Buttons ── */}
-        <section className="space-y-3">
-          <h2 className="text-[11px] font-semibold uppercase tracking-[0.1em] text-text-secondary">
-            Buttons
-          </h2>
+        <ComponentSection title="Buttons">
           <div className="flex flex-wrap gap-3">
             <Button variant="primary">Primary</Button>
             <Button variant="secondary">Secondary</Button>
@@ -38,31 +44,25 @@ function App() {
               Disabled
             </Button>
           </div>
-          <div className="flex flex-wrap items-end gap-3">
+          <div className="mt-3 flex flex-wrap items-end gap-3">
             <Button size="sm">Small</Button>
             <Button size="md">Medium</Button>
             <Button size="lg">Large</Button>
           </div>
-        </section>
+        </ComponentSection>
 
         {/* ── Inputs ── */}
-        <section className="space-y-3">
-          <h2 className="text-[11px] font-semibold uppercase tracking-[0.1em] text-text-secondary">
-            Inputs
-          </h2>
+        <ComponentSection title="Inputs">
           <div className="grid max-w-sm gap-4">
             <Input label="Username" placeholder="Enter username" />
             <Input label="Email" type="email" placeholder="you@example.com" />
             <Input label="Password" type="password" placeholder="••••••••" />
             <Input label="With Error" placeholder="Invalid value" error="This field is required" />
           </div>
-        </section>
+        </ComponentSection>
 
         {/* ── Badges ── */}
-        <section className="space-y-3">
-          <h2 className="text-[11px] font-semibold uppercase tracking-[0.1em] text-text-secondary">
-            Badges
-          </h2>
+        <ComponentSection title="Badges">
           <div className="flex flex-wrap gap-2">
             <Badge variant="white-win">1-0</Badge>
             <Badge variant="black-win">0-1</Badge>
@@ -74,13 +74,10 @@ function App() {
             <Badge variant="eco">B20</Badge>
             <Badge variant="pill">Active</Badge>
           </div>
-        </section>
+        </ComponentSection>
 
         {/* ── Cards ── */}
-        <section className="space-y-3">
-          <h2 className="text-[11px] font-semibold uppercase tracking-[0.1em] text-text-secondary">
-            Cards
-          </h2>
+        <ComponentSection title="Cards">
           <div className="grid grid-cols-3 gap-4">
             <Card header="Default">
               <p className="text-sm text-text-primary">Standard card panel</p>
@@ -92,13 +89,10 @@ function App() {
               <p className="text-sm text-text-primary">Hover to see the effect</p>
             </Card>
           </div>
-        </section>
+        </ComponentSection>
 
         {/* ── Skeletons ── */}
-        <section className="space-y-3">
-          <h2 className="text-[11px] font-semibold uppercase tracking-[0.1em] text-text-secondary">
-            Skeletons
-          </h2>
+        <ComponentSection title="Skeletons">
           <div className="grid grid-cols-2 gap-6">
             <div className="space-y-2">
               <p className="text-[11px] text-text-tertiary">Text line</p>
@@ -107,7 +101,7 @@ function App() {
               <Skeleton variant="text" className="w-1/2" />
             </div>
             <div className="space-y-2">
-              <p className="text-[11px] text-text-tertiary">Number / Card / Row</p>
+              <p className="text-[11px] text-text-tertiary">Number / Row / Avatar</p>
               <Skeleton variant="number" />
               <Skeleton variant="table-row" />
               <Skeleton variant="avatar" />
@@ -116,34 +110,22 @@ function App() {
               <Skeleton variant="card" />
             </div>
           </div>
-        </section>
+        </ComponentSection>
 
         {/* ── Spinners ── */}
-        <section className="space-y-3">
-          <h2 className="text-[11px] font-semibold uppercase tracking-[0.1em] text-text-secondary">
-            Spinners
-          </h2>
+        <ComponentSection title="Spinners">
           <div className="flex items-end gap-4">
-            <div className="flex flex-col items-center gap-2">
-              <Spinner size="sm" />
-              <span className="text-[10px] text-text-tertiary">SM</span>
-            </div>
-            <div className="flex flex-col items-center gap-2">
-              <Spinner size="md" />
-              <span className="text-[10px] text-text-tertiary">MD</span>
-            </div>
-            <div className="flex flex-col items-center gap-2">
-              <Spinner size="lg" />
-              <span className="text-[10px] text-text-tertiary">LG</span>
-            </div>
+            {['sm', 'md', 'lg'].map((s) => (
+              <div key={s} className="flex flex-col items-center gap-2">
+                <Spinner size={s} />
+                <span className="text-[10px] text-text-tertiary uppercase">{s}</span>
+              </div>
+            ))}
           </div>
-        </section>
+        </ComponentSection>
 
         {/* ── EmptyState ── */}
-        <section className="space-y-3">
-          <h2 className="text-[11px] font-semibold uppercase tracking-[0.1em] text-text-secondary">
-            Empty State
-          </h2>
+        <ComponentSection title="Empty State">
           <div className="grid grid-cols-2 gap-4">
             <Card>
               <EmptyState
@@ -162,67 +144,122 @@ function App() {
               />
             </Card>
           </div>
-        </section>
+        </ComponentSection>
 
-        {/* ── Modal + Toast demos ── */}
-        <section className="space-y-3">
-          <h2 className="text-[11px] font-semibold uppercase tracking-[0.1em] text-text-secondary">
-            Modal &amp; Toast
-          </h2>
+        {/* ── Modal + Toast ── */}
+        <ComponentSection title="Modal & Toast">
           <div className="flex flex-wrap gap-3">
             <Button onClick={() => setModalOpen(true)}>Open Modal</Button>
             <Button variant="secondary" onClick={() => setDeleteOpen(true)}>
               Delete Modal
             </Button>
-            <Button
-              variant="ghost"
-              onClick={() =>
-                showToast('success', {
-                  title: 'Match imported',
-                  body: '25 new matches added to the database.',
-                })
-              }
-            >
-              Success Toast
-            </Button>
-            <Button
-              variant="ghost"
-              onClick={() =>
-                showToast('error', {
-                  title: 'Import failed',
-                  body: 'Invalid file format. Please upload a CSV.',
-                })
-              }
-            >
-              Error Toast
-            </Button>
-            <Button
-              variant="ghost"
-              onClick={() =>
-                showToast('warning', {
-                  title: 'Rate limit',
-                  body: 'API limit reached. Try again in 60s.',
-                })
-              }
-            >
-              Warning Toast
-            </Button>
-            <Button
-              variant="ghost"
-              onClick={() =>
-                showToast('info', {
-                  title: 'New version',
-                  body: 'ChessIQ v2.1.0 is now available.',
-                })
-              }
-            >
-              Info Toast
-            </Button>
+            {['success', 'error', 'warning', 'info'].map((t) => (
+              <Button
+                key={t}
+                variant="ghost"
+                onClick={() =>
+                  showToast(t, {
+                    title: `${t.charAt(0).toUpperCase() + t.slice(1)} toast`,
+                    body: 'This is a demo notification.',
+                  })
+                }
+              >
+                {t.charAt(0).toUpperCase() + t.slice(1)} Toast
+              </Button>
+            ))}
           </div>
-        </section>
+        </ComponentSection>
+
+        {/* ── Breadcrumb ── */}
+        <ComponentSection title="Breadcrumb">
+          <Breadcrumb
+            items={[
+              { label: 'Dashboard', href: '/' },
+              { label: 'Matches', href: '/matches' },
+              { label: 'B20 Sicilian' },
+            ]}
+          />
+        </ComponentSection>
+
+        {/* ── Tabs ── */}
+        <ComponentSection title="Tabs">
+          <div className="space-y-4">
+            <div>
+              <p className="mb-2 text-[11px] text-text-tertiary">Underline variant</p>
+              <Tabs
+                tabs={[
+                  { label: 'Matches', value: 'matches' },
+                  { label: 'Players', value: 'players' },
+                  { label: 'Openings', value: 'openings' },
+                  { label: 'Analytics', value: 'analytics' },
+                ]}
+                activeTab={tab}
+                onChange={setTab}
+              />
+            </div>
+            <div>
+              <p className="mb-2 text-[11px] text-text-tertiary">Pill variant</p>
+              <Tabs
+                variant="pill"
+                tabs={[
+                  { label: 'Overview', value: 'overview' },
+                  { label: 'Stats', value: 'stats' },
+                  { label: 'History', value: 'history' },
+                ]}
+                activeTab={tab === 'matches' ? 'overview' : 'stats'}
+                onChange={() => {}}
+              />
+            </div>
+          </div>
+        </ComponentSection>
+
+        {/* ── Toggle ── */}
+        <ComponentSection title="Toggle">
+          <div className="flex flex-col gap-3">
+            <Toggle checked={toggleVal} onChange={setToggleVal} label="Enable notifications" />
+            <Toggle checked={!toggleVal} onChange={setToggleVal} label="Disabled toggle" disabled />
+          </div>
+        </ComponentSection>
+
+        {/* ── Select ── */}
+        <ComponentSection title="Select">
+          <div className="grid max-w-xs gap-4">
+            <Select
+              label="Time Control"
+              value={selectVal}
+              onChange={(e) => setSelectVal(e.target.value)}
+              options={[
+                { label: 'Bullet (1+0)', value: 'bullet' },
+                { label: 'Blitz (3+0)', value: 'blitz' },
+                { label: 'Rapid (10+0)', value: 'rapid' },
+                { label: 'Classical (30+0)', value: 'classical' },
+              ]}
+              fullWidth
+            />
+            <Select
+              label="With Error"
+              value=""
+              onChange={() => {}}
+              options={[]}
+              error="This field is required"
+              fullWidth
+            />
+          </div>
+        </ComponentSection>
+
+        {/* ── Pagination ── */}
+        <ComponentSection title="Pagination">
+          <Pagination
+            page={page}
+            totalPages={12}
+            totalItems={20058}
+            pageSize={10}
+            onPageChange={setPage}
+          />
+        </ComponentSection>
       </div>
 
-      {/* ── Modals ── */}
+      {/* Modals */}
       <Modal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
@@ -256,10 +293,7 @@ function App() {
               variant="danger"
               onClick={() => {
                 setDeleteOpen(false);
-                showToast('error', {
-                  title: 'Match deleted',
-                  body: 'The match has been permanently removed.',
-                });
+                showToast('error', { title: 'Match deleted', body: 'Permanently removed.' });
               }}
             >
               Delete
@@ -270,6 +304,17 @@ function App() {
         <p className="text-[14px] text-error-red">This action cannot be undone.</p>
       </Modal>
     </div>
+  );
+}
+
+function ComponentSection({ title, children }) {
+  return (
+    <section className="space-y-3">
+      <h2 className="text-[11px] font-semibold uppercase tracking-[0.1em] text-text-secondary">
+        {title}
+      </h2>
+      {children}
+    </section>
   );
 }
 
