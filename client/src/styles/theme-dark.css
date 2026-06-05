@@ -1,34 +1,35 @@
 /* ───────────────────────────────────────────────
    ChessIQ Analytics — Dark Theme Design Tokens
    Grandmaster's War Room palette
+   Exact hex values from design.md
    ─────────────────────────────────────────────── */
 
 :root {
   /* ── Backgrounds ── */
   --color-bg-base: #0b0b0e;
   --color-bg-surface: #131318;
-  --color-bg-elevated: #1a1a20;
-  --color-bg-hover: #22222a;
+  --color-bg-elevated: #1a1a22;
+  --color-bg-hover: #222230;
+  --color-bg-input: #0d0d12;
 
   /* ── Borders ── */
-  --color-border-subtle: #2a2a32;
-  --color-border-default: #3a3a45;
+  --color-border-subtle: #252530;
+  --color-border-strong: #35354a;
 
   /* ── Text ── */
   --color-text-primary: #ede9e0;
-  --color-text-secondary: #9ca3af;
-  --color-text-tertiary: #6b7280;
+  --color-text-secondary: #8c8ca0;
+  --color-text-tertiary: #55556a;
 
   /* ── Accent (Gold) ── */
   --color-accent-gold: #c9a84c;
-  --color-accent-gold-hover: #d4b556;
+  --color-accent-gold-hover: #b8963e;
 
-  /* ── Semantic ── */
-  --color-success-green: #22c55e;
-  --color-error-red: #ef4444;
+  /* ── Semantic / Data Colors ── */
+  --color-success-green: #2dd4a0;
+  --color-error-red: #f05252;
   --color-warning-amber: #f59e0b;
-  --color-info-blue: #3b82f6;
-  --color-draw-blue: #60a5fa;
+  --color-info-blue: #6b7aff;
 
   /* ── Typography ── */
   --font-family-ui: Inter, system-ui, -apple-system, sans-serif;
