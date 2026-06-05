@@ -5,3 +5,5 @@ export { default as Card } from './Card';
 export { default as Skeleton } from './Skeleton';
 export { default as EmptyState } from './EmptyState';
 export { default as Spinner } from './Spinner';
+export { default as Modal } from './Modal';
+export { showToast } from './Toast';

@@ -1,10 +1,23 @@
-import { Button, Input, Badge, Card, Skeleton, EmptyState, Spinner } from './components/ui';
+import { useState } from 'react';
+import {
+  Button,
+  Input,
+  Badge,
+  Card,
+  Skeleton,
+  EmptyState,
+  Spinner,
+  Modal,
+  showToast,
+} from './components/ui';
 
 function App() {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+
   return (
     <div className="chess-bg min-h-screen bg-bg-base p-8">
       <div className="mx-auto max-w-4xl space-y-10">
-        {/* ── Title ── */}
         <h1 className="font-display text-3xl font-bold text-text-primary">ChessIQ Analytics</h1>
 
         {/* ── Buttons ── */}
@@ -150,7 +163,112 @@ function App() {
             </Card>
           </div>
         </section>
+
+        {/* ── Modal + Toast demos ── */}
+        <section className="space-y-3">
+          <h2 className="text-[11px] font-semibold uppercase tracking-[0.1em] text-text-secondary">
+            Modal &amp; Toast
+          </h2>
+          <div className="flex flex-wrap gap-3">
+            <Button onClick={() => setModalOpen(true)}>Open Modal</Button>
+            <Button variant="secondary" onClick={() => setDeleteOpen(true)}>
+              Delete Modal
+            </Button>
+            <Button
+              variant="ghost"
+              onClick={() =>
+                showToast('success', {
+                  title: 'Match imported',
+                  body: '25 new matches added to the database.',
+                })
+              }
+            >
+              Success Toast
+            </Button>
+            <Button
+              variant="ghost"
+              onClick={() =>
+                showToast('error', {
+                  title: 'Import failed',
+                  body: 'Invalid file format. Please upload a CSV.',
+                })
+              }
+            >
+              Error Toast
+            </Button>
+            <Button
+              variant="ghost"
+              onClick={() =>
+                showToast('warning', {
+                  title: 'Rate limit',
+                  body: 'API limit reached. Try again in 60s.',
+                })
+              }
+            >
+              Warning Toast
+            </Button>
+            <Button
+              variant="ghost"
+              onClick={() =>
+                showToast('info', {
+                  title: 'New version',
+                  body: 'ChessIQ v2.1.0 is now available.',
+                })
+              }
+            >
+              Info Toast
+            </Button>
+          </div>
+        </section>
       </div>
+
+      {/* ── Modals ── */}
+      <Modal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        title="Match Details"
+        footer={
+          <>
+            <Button variant="ghost" onClick={() => setModalOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={() => setModalOpen(false)}>Confirm</Button>
+          </>
+        }
+      >
+        <div className="space-y-3">
+          <Input label="Player" placeholder="Enter player name" />
+          <Input label="Rating" placeholder="Enter rating" />
+        </div>
+      </Modal>
+
+      <Modal
+        isOpen={deleteOpen}
+        onClose={() => setDeleteOpen(false)}
+        title="Delete Match?"
+        variant="delete"
+        footer={
+          <>
+            <Button variant="ghost" onClick={() => setDeleteOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              variant="danger"
+              onClick={() => {
+                setDeleteOpen(false);
+                showToast('error', {
+                  title: 'Match deleted',
+                  body: 'The match has been permanently removed.',
+                });
+              }}
+            >
+              Delete
+            </Button>
+          </>
+        }
+      >
+        <p className="text-[14px] text-error-red">This action cannot be undone.</p>
+      </Modal>
     </div>
   );
 }
