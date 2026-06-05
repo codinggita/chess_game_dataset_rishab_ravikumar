@@ -1,9 +1,9 @@
-import { Button, Input, Badge } from './components/ui';
+import { Button, Input, Badge, Card, Skeleton, EmptyState, Spinner } from './components/ui';
 
 function App() {
   return (
     <div className="chess-bg min-h-screen bg-bg-base p-8">
-      <div className="mx-auto max-w-2xl space-y-8">
+      <div className="mx-auto max-w-4xl space-y-10">
         {/* ── Title ── */}
         <h1 className="font-display text-3xl font-bold text-text-primary">ChessIQ Analytics</h1>
 
@@ -60,6 +60,94 @@ function App() {
             <Badge variant="rated">Rated</Badge>
             <Badge variant="eco">B20</Badge>
             <Badge variant="pill">Active</Badge>
+          </div>
+        </section>
+
+        {/* ── Cards ── */}
+        <section className="space-y-3">
+          <h2 className="text-[11px] font-semibold uppercase tracking-[0.1em] text-text-secondary">
+            Cards
+          </h2>
+          <div className="grid grid-cols-3 gap-4">
+            <Card header="Default">
+              <p className="text-sm text-text-primary">Standard card panel</p>
+            </Card>
+            <Card variant="featured" header="Featured">
+              <p className="text-sm text-text-primary">Gold border accent</p>
+            </Card>
+            <Card variant="interactive" header="Hover Me">
+              <p className="text-sm text-text-primary">Hover to see the effect</p>
+            </Card>
+          </div>
+        </section>
+
+        {/* ── Skeletons ── */}
+        <section className="space-y-3">
+          <h2 className="text-[11px] font-semibold uppercase tracking-[0.1em] text-text-secondary">
+            Skeletons
+          </h2>
+          <div className="grid grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <p className="text-[11px] text-text-tertiary">Text line</p>
+              <Skeleton variant="text" />
+              <Skeleton variant="text" className="w-3/4" />
+              <Skeleton variant="text" className="w-1/2" />
+            </div>
+            <div className="space-y-2">
+              <p className="text-[11px] text-text-tertiary">Number / Card / Row</p>
+              <Skeleton variant="number" />
+              <Skeleton variant="table-row" />
+              <Skeleton variant="avatar" />
+            </div>
+            <div className="col-span-2">
+              <Skeleton variant="card" />
+            </div>
+          </div>
+        </section>
+
+        {/* ── Spinners ── */}
+        <section className="space-y-3">
+          <h2 className="text-[11px] font-semibold uppercase tracking-[0.1em] text-text-secondary">
+            Spinners
+          </h2>
+          <div className="flex items-end gap-4">
+            <div className="flex flex-col items-center gap-2">
+              <Spinner size="sm" />
+              <span className="text-[10px] text-text-tertiary">SM</span>
+            </div>
+            <div className="flex flex-col items-center gap-2">
+              <Spinner size="md" />
+              <span className="text-[10px] text-text-tertiary">MD</span>
+            </div>
+            <div className="flex flex-col items-center gap-2">
+              <Spinner size="lg" />
+              <span className="text-[10px] text-text-tertiary">LG</span>
+            </div>
+          </div>
+        </section>
+
+        {/* ── EmptyState ── */}
+        <section className="space-y-3">
+          <h2 className="text-[11px] font-semibold uppercase tracking-[0.1em] text-text-secondary">
+            Empty State
+          </h2>
+          <div className="grid grid-cols-2 gap-4">
+            <Card>
+              <EmptyState
+                piece="♟"
+                title="No matches found"
+                body="Try adjusting your filters or add a new match."
+              />
+            </Card>
+            <Card>
+              <EmptyState
+                piece="♔"
+                title="No players yet"
+                body="Import player data to get started."
+                ctaLabel="Import Players"
+                onCtaClick={() => alert('CTA clicked!')}
+              />
+            </Card>
           </div>
         </section>
       </div>
