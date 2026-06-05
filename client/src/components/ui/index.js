@@ -7,3 +7,8 @@ export { default as EmptyState } from './EmptyState';
 export { default as Spinner } from './Spinner';
 export { default as Modal } from './Modal';
 export { showToast } from './Toast';
+export { default as Pagination } from './Pagination';
+export { default as Tabs } from './Tabs';
+export { default as Breadcrumb } from './Breadcrumb';
+export { default as Toggle } from './Toggle';
+export { default as Select } from './Select';
