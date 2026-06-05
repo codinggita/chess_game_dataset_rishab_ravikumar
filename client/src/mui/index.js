@@ -1,2 +1,3 @@
-// Barrel export
-export {};
+export { darkTheme, lightTheme } from './theme';
+export { useThemeMode } from './ThemeContext';
+export { default as ThemeWrapper } from './ThemeWrapper';
