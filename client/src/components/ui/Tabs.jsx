@@ -17,7 +17,7 @@ export default function Tabs({
     <div
       className={clsx(
         'flex',
-        variant === 'underline' && 'border-b border-border-subtle',
+        variant === 'underline' && 'border-b border-border-default',
         variant === 'pill' && 'gap-1',
         className,
       )}

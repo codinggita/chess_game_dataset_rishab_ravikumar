@@ -39,7 +39,7 @@ function ToastContent({ type, title, body, onClose }) {
   return (
     <div
       className={clsx(
-        'relative flex w-[320px] items-start gap-3 overflow-hidden rounded-lg border border-border-subtle bg-bg-elevated p-4',
+        'relative flex w-[320px] items-start gap-3 overflow-hidden rounded-[6px] border border-border-default bg-bg-elevated p-4',
         'border-l-3',
         'shadow-[0_4px_12px_rgba(0,0,0,0.3)]',
         'animate-[fade-in-up_200ms_ease-out]',

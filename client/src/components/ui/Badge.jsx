@@ -59,6 +59,44 @@ const variantConfig = {
     border: 'border-accent-gold/30',
     prefix: '',
   },
+  admin: {
+    bg: 'bg-accent-gold/8',
+    text: 'text-accent-gold',
+    border: 'border-accent-gold',
+    prefix: '',
+  },
+  user: {
+    bg: 'bg-[rgba(53,53,74,0.12)]',
+    text: 'text-text-secondary',
+    border: 'border-border-strong',
+    prefix: '',
+  },
+  active: {
+    bg: 'bg-[rgba(45,212,160,0.08)]',
+    text: 'text-success-green',
+    border: 'border-success-green',
+    prefix: '',
+    dot: true,
+  },
+  banned: {
+    bg: 'bg-[rgba(240,82,82,0.08)]',
+    text: 'text-error-red',
+    border: 'border-error-red',
+    prefix: '',
+  },
+  'most-used': {
+    bg: 'bg-accent-gold',
+    text: 'text-[#0B0B0E]',
+    border: 'border-transparent',
+    prefix: '',
+  },
+  live: {
+    bg: 'bg-accent-gold/10',
+    text: 'text-accent-gold',
+    border: 'border-accent-gold/25',
+    prefix: '',
+    pulsing: true,
+  },
 };
 
 export default function Badge({ children, variant = 'pill', className }) {
@@ -66,6 +104,9 @@ export default function Badge({ children, variant = 'pill', className }) {
 
   const isEco = variant === 'eco';
   const isPill = variant === 'pill';
+  const isMostUsed = variant === 'most-used';
+  const isLive = variant === 'live';
+  const isActive = variant === 'active';
 
   return (
     <span
@@ -75,10 +116,19 @@ export default function Badge({ children, variant = 'pill', className }) {
         cfg.text,
         cfg.border,
         isEco && 'font-mono rounded-[2px]',
-        isPill ? 'rounded-full px-3 py-[3px]' : 'rounded-[3px]',
+        isPill && 'rounded-full px-3 py-[3px]',
+        isMostUsed && 'rounded-[3px] text-[10px]',
+        isLive && 'rounded-full px-3 py-[3px]',
+        !isPill && !isMostUsed && !isLive && 'rounded-[3px]',
         className,
       )}
     >
+      {isActive && (
+        <span className="mr-[4px] h-[6px] w-[6px] rounded-full bg-success-green animate-pulse" />
+      )}
+      {isLive && (
+        <span className="mr-[4px] h-[6px] w-[6px] rounded-full bg-accent-gold animate-pulse" />
+      )}
       {cfg.prefix && <span className="mr-[3px]">{cfg.prefix}</span>}
       {children}
     </span>

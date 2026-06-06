@@ -7,13 +7,16 @@
 :root {
   /* ── Backgrounds ── */
   --color-bg-base: #0b0b0e;
+  --color-bg-deep: #0d0d10;
   --color-bg-surface: #131318;
   --color-bg-elevated: #1a1a22;
   --color-bg-hover: #222230;
+  --color-bg-row-hover: #181820;
   --color-bg-input: #0d0d12;
 
   /* ── Borders ── */
-  --color-border-subtle: #252530;
+  --color-border-subtle: #1e1e28;
+  --color-border-default: #252530;
   --color-border-strong: #35354a;
 
   /* ── Text ── */
@@ -24,6 +27,16 @@
   /* ── Accent (Gold) ── */
   --color-accent-gold: #c9a84c;
   --color-accent-gold-hover: #b8963e;
+  --color-gold-dim: #8a6b2a;
+  --color-gold-glow: rgba(201, 168, 76, 0.08);
+  --color-gold-glow-strong: rgba(201, 168, 76, 0.12);
+  --color-gold-border-soft: rgba(201, 168, 76, 0.15);
+  --color-gold-border-mid: rgba(201, 168, 76, 0.25);
+  --color-gold-border-featured: rgba(201, 168, 76, 0.35);
+
+  /* ── Purple Accent ── */
+  --color-purple-primary: #7c4dff;
+  --color-purple-dim: #4a2db5;
 
   /* ── Semantic / Data Colors ── */
   --color-success-green: #2dd4a0;

@@ -1,17 +1,17 @@
 import clsx from 'clsx';
 
 const variantStyles = {
-  default: 'bg-bg-surface border-border-subtle',
+  default: 'bg-bg-surface border-border-default',
   featured: 'bg-bg-surface border-accent-gold',
   interactive:
-    'bg-bg-surface border-border-subtle hover:bg-bg-elevated hover:border-border-strong cursor-pointer',
+    'bg-bg-surface border-border-default hover:bg-bg-elevated hover:border-border-strong cursor-pointer',
 };
 
 export default function Card({ children, variant = 'default', header, className, ...props }) {
   return (
     <div
       className={clsx(
-        'rounded-lg border p-5 transition-colors duration-150',
+        'rounded-[6px] border p-5 transition-colors duration-150',
         variantStyles[variant],
         className,
       )}

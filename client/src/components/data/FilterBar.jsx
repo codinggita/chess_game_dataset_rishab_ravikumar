@@ -25,7 +25,7 @@ export default function FilterBar({ groups, onClearAll, className, ...props }) {
                   'inline-flex items-center gap-1 rounded-[4px] px-2.5 py-1 text-[11px] font-medium uppercase transition-colors',
                   opt.active
                     ? 'bg-accent-gold text-[#0B0B0E]'
-                    : 'border border-border-subtle bg-transparent text-text-secondary hover:bg-accent-gold/8 hover:border-accent-gold hover:text-accent-gold',
+                    : 'border border-border-default bg-transparent text-text-secondary hover:bg-accent-gold/8 hover:border-accent-gold hover:text-accent-gold',
                 )}
               >
                 {opt.label}

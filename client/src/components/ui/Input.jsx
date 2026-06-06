@@ -35,8 +35,8 @@ const Input = forwardRef(
               'h-[38px] w-full rounded-[4px] border bg-bg-input px-3 text-[14px] text-text-primary placeholder:text-text-tertiary transition-all duration-150',
               'focus:outline-none focus:border-accent-gold focus:shadow-[0_0_0_2px_rgba(201,168,76,0.15)]',
               error
-                ? 'border-error-red shadow-[0_0_0_1px_rgba(240,82,82,0.4)]'
-                : 'border-border-subtle hover:border-border-strong',
+                ? 'border-error-red shadow-[0_0_0_2px_rgba(240,82,82,0.15)]'
+                : 'border-border-default hover:border-border-strong',
               icon && 'pl-9',
               isPassword && 'pr-9',
             )}

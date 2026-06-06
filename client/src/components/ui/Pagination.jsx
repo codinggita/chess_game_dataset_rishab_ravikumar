@@ -48,7 +48,7 @@ export default function Pagination({
         onClick={() => onPageChange(page - 1)}
         disabled={page <= 1}
         aria-label="Previous page"
-        className="flex h-8 w-8 items-center justify-center rounded-[4px] border border-border-subtle bg-transparent text-[13px] text-text-secondary transition-colors hover:bg-bg-elevated hover:text-text-primary disabled:pointer-events-none disabled:opacity-30"
+        className="flex h-8 w-8 items-center justify-center rounded-[4px] border border-border-default bg-transparent text-[13px] text-text-secondary transition-colors hover:bg-bg-elevated hover:text-text-primary disabled:pointer-events-none disabled:opacity-30"
       >
         ‹
       </button>
@@ -62,7 +62,7 @@ export default function Pagination({
             'flex h-8 w-8 items-center justify-center rounded-[4px] text-[13px] font-mono transition-colors',
             p === page
               ? 'border-none bg-accent-gold text-[#0B0B0E] font-semibold'
-              : 'border border-border-subtle bg-transparent text-text-secondary hover:bg-bg-elevated hover:text-text-primary',
+              : 'border border-border-default bg-transparent text-text-secondary hover:bg-bg-elevated hover:text-text-primary',
           )}
         >
           {p}
@@ -74,7 +74,7 @@ export default function Pagination({
         onClick={() => onPageChange(page + 1)}
         disabled={page >= totalPages}
         aria-label="Next page"
-        className="flex h-8 w-8 items-center justify-center rounded-[4px] border border-border-subtle bg-transparent text-[13px] text-text-secondary transition-colors hover:bg-bg-elevated hover:text-text-primary disabled:pointer-events-none disabled:opacity-30"
+        className="flex h-8 w-8 items-center justify-center rounded-[4px] border border-border-default bg-transparent text-[13px] text-text-secondary transition-colors hover:bg-bg-elevated hover:text-text-primary disabled:pointer-events-none disabled:opacity-30"
       >
         ›
       </button>

@@ -118,7 +118,7 @@ export default function Modal({
         {/* ── Header ── */}
         <div
           className={clsx(
-            'flex items-center justify-between border-b border-border-subtle px-6 pb-4 pt-5',
+            'flex items-center justify-between border-b border-border-default px-6 pb-4 pt-5',
             isDelete && 'border-none pb-0 pt-8',
           )}
         >
@@ -157,7 +157,7 @@ export default function Modal({
             className={clsx(
               'flex gap-2 px-6 pb-5 pt-4',
               isDelete ? 'justify-center' : 'justify-end',
-              !isDelete && 'border-t border-border-subtle',
+              !isDelete && 'border-t border-border-default',
             )}
           >
             {footer}

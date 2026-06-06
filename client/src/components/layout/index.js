@@ -1,2 +1,1 @@
-// Barrel export
-export {};
+export { default as Sidebar } from './Sidebar';

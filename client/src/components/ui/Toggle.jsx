@@ -22,7 +22,7 @@ export default function Toggle({ checked, onChange, disabled, label, className, 
         onClick={() => onChange(!checked)}
         className={clsx(
           'relative inline-flex items-center h-[22px] w-[40px] flex-shrink-0 rounded-full transition-colors duration-200',
-          checked ? 'bg-accent-gold' : 'bg-bg-hover',
+          checked ? 'bg-accent-gold' : 'bg-border-default',
         )}
         {...props}
       >
