@@ -44,7 +44,7 @@ export default function Select({
           );
         })}
       </MuiSelect>
-      {error && <p className="mt-1 text-[11px] text-error-red">{error}</p>}
+      {error && <p className="mt-1 text-[11px] text-data-negative">{error}</p>}
     </FormControl>
   );
 }

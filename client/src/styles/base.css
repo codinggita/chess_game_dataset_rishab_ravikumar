@@ -27,28 +27,28 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-accent-gold);
+  background: var(--color-gold-primary);
   border-radius: var(--radius-sm);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-accent-gold-hover);
+  background: var(--color-gold-hover);
 }
 
 /* Firefox scrollbar */
 * {
   scrollbar-width: thin;
-  scrollbar-color: var(--color-accent-gold) transparent;
+  scrollbar-color: var(--color-gold-primary) transparent;
 }
 
 /* ── Text Selection ── */
 ::selection {
-  background: var(--color-accent-gold);
+  background: var(--color-gold-primary);
   color: var(--color-bg-base);
 }
 
 /* ── Focus Ring (accessible) ── */
 :focus-visible {
-  outline: 2px solid var(--color-accent-gold);
+  outline: 2px solid var(--color-gold-primary);
   outline-offset: 2px;
 }

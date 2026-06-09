@@ -1,163 +1,94 @@
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef } from 'react';
 import clsx from 'clsx';
 
-/* ── Modal per design.md spec ──
-   Variants: default | delete
-   Backdrop: rgba(0,0,0,0.75) + blur(4px)
-   Card: bg #1A1A22, border #35354A, radius 8px, max-w 560px
-   Focus trap, Escape/backdrop close, body scroll lock
+/* ── Modal per PRD spec (§5.1) ──
+   Variants: default, delete-confirm
+   Backdrop blur, Escape closes, focus trap
 */
+
 export default function Modal({
-  isOpen,
+  open,
   onClose,
   title,
   children,
   footer,
   variant = 'default',
   className,
-  ...props
 }) {
-  const overlayRef = useRef(null);
   const modalRef = useRef(null);
-  const prevFocusRef = useRef(null);
+  const isDelete = variant === 'delete-confirm';
 
-  // ── Body scroll lock ──
+  /* ── Escape to close ── */
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    }
-    return () => {
-      document.body.style.overflow = '';
+    if (!open) return;
+    const handleKey = (e) => {
+      if (e.key === 'Escape') onClose?.();
     };
-  }, [isOpen]);
+    document.addEventListener('keydown', handleKey);
+    return () => document.removeEventListener('keydown', handleKey);
+  }, [open, onClose]);
 
-  // ── Focus trap + restore ──
+  /* ── Focus trap ── */
   useEffect(() => {
-    if (!isOpen) return;
-
-    prevFocusRef.current = document.activeElement;
-
-    const modal = modalRef.current;
-    if (modal) {
-      const focusable = modal.querySelectorAll(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-      );
-      if (focusable.length) {
-        focusable[0].focus();
-      }
+    if (open) {
+      setTimeout(() => modalRef.current?.focus(), 50);
     }
+  }, [open]);
 
-    const handleKeyDown = (e) => {
-      if (e.key === 'Escape') {
-        onClose();
-        return;
-      }
-      if (e.key !== 'Tab' || !modal) return;
-
-      const focusable = modal.querySelectorAll(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-      );
-      if (!focusable.length) return;
-
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
-
-      if (e.shiftKey) {
-        if (document.activeElement === first) {
-          e.preventDefault();
-          last.focus();
-        }
-      } else {
-        if (document.activeElement === last) {
-          e.preventDefault();
-          first.focus();
-        }
-      }
-    };
-
-    document.addEventListener('keydown', handleKeyDown);
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-      if (prevFocusRef.current) {
-        prevFocusRef.current.focus();
-      }
-    };
-  }, [isOpen, onClose]);
-
-  // ── Backdrop click ──
-  const handleBackdropClick = useCallback(
-    (e) => {
-      if (e.target === overlayRef.current) onClose();
-    },
-    [onClose],
-  );
-
-  if (!isOpen) return null;
-
-  const isDelete = variant === 'delete';
+  if (!open) return null;
 
   return (
     <div
-      ref={overlayRef}
-      onClick={handleBackdropClick}
       className="fixed inset-0 z-50 flex items-center justify-center bg-[rgba(0,0,0,0.75)] backdrop-blur-sm"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose?.();
+      }}
     >
       <div
         ref={modalRef}
+        tabIndex={-1}
         role="dialog"
         aria-modal="true"
         aria-label={title}
         className={clsx(
-          'w-[90vw] max-w-[560px] animate-[fade-in-up_200ms_ease-out] rounded-lg border bg-bg-elevated p-0',
-          'border-border-strong',
-          isDelete && 'max-w-[400px] text-center',
+          'w-full max-w-[460px] rounded-[8px] border border-border-strong bg-bg-elevated',
+          'focus-visible:outline-none',
           className,
         )}
-        {...props}
       >
         {/* ── Header ── */}
         <div
           className={clsx(
-            'flex items-center justify-between border-b border-border-default px-6 pb-4 pt-5',
-            isDelete && 'border-none pb-0 pt-8',
+            'flex items-center justify-between border-b px-6 pb-4 pt-5',
+            isDelete ? 'border-b-data-negative/30' : 'border-b-border-subtle',
           )}
         >
-          {isDelete ? (
-            <div className="w-full">
-              <div className="mb-4 flex justify-center">
-                <span
-                  className="flex h-10 w-10 items-center justify-center rounded-full bg-error-red/10 text-xl"
-                  aria-hidden="true"
-                >
-                  ⚠
-                </span>
-              </div>
-              <h2 className="text-center text-[18px] font-medium text-text-primary">{title}</h2>
-            </div>
-          ) : (
-            <>
-              <h2 className="text-[16px] font-semibold text-text-primary">{title}</h2>
-              <button
-                onClick={onClose}
-                aria-label="Close"
-                className="flex h-8 w-8 items-center justify-center rounded-md text-text-secondary transition-colors hover:bg-bg-hover hover:text-text-primary"
-              >
-                ✕
-              </button>
-            </>
-          )}
+          <div className="flex items-center gap-3">
+            {isDelete && (
+              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-data-negative/10 text-xl">
+                ⚠
+              </span>
+            )}
+            <h2 className="text-[16px] font-semibold text-text-primary">{title}</h2>
+          </div>
+          <button
+            onClick={onClose}
+            className="flex h-7 w-7 items-center justify-center rounded-[4px] text-text-tertiary hover:bg-bg-hover hover:text-text-primary"
+            aria-label="Close modal"
+          >
+            ✕
+          </button>
         </div>
 
         {/* ── Body ── */}
-        <div className={clsx('px-6', isDelete ? 'pb-2 pt-4' : 'py-6')}>{children}</div>
+        <div className="px-6 py-5">{children}</div>
 
         {/* ── Footer ── */}
         {footer && (
           <div
             className={clsx(
-              'flex gap-2 px-6 pb-5 pt-4',
-              isDelete ? 'justify-center' : 'justify-end',
-              !isDelete && 'border-t border-border-default',
+              'flex items-center justify-end gap-3 px-6 pb-5 pt-0',
+              !isDelete && 'border-t border-border-subtle pt-4',
             )}
           >
             {footer}

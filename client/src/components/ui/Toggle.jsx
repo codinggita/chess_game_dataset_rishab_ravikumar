@@ -1,35 +1,29 @@
 import clsx from 'clsx';
 
-/* ── Toggle per PRD spec ──
-   40×22px, gold active, slides
-   Track: bg #252530, active gold
-   Thumb: white circle
+/* ── Toggle per PRD spec (§5.1) ──
+   40×22px track, 18px circle, gold active
 */
-export default function Toggle({ checked, onChange, disabled, label, className, ...props }) {
+
+export default function Toggle({ checked, onChange, label, disabled, className }) {
   return (
-    <label
-      className={clsx(
-        'inline-flex items-center gap-3',
-        disabled ? 'cursor-not-allowed opacity-40' : 'cursor-pointer',
-        className,
-      )}
-    >
+    <label className={clsx('inline-flex items-center gap-3', disabled && 'pointer-events-none opacity-40', className)}>
       <button
         type="button"
         role="switch"
         aria-checked={checked}
         disabled={disabled}
-        onClick={() => onChange(!checked)}
+        onClick={() => onChange?.(!checked)}
         className={clsx(
-          'relative inline-flex items-center h-[22px] w-[40px] flex-shrink-0 rounded-full transition-colors duration-200',
-          checked ? 'bg-accent-gold' : 'bg-border-default',
+          'relative inline-flex h-[22px] w-[40px] flex-shrink-0 rounded-full border transition-colors duration-200',
+          checked
+            ? 'bg-gold-primary border-gold-primary'
+            : 'bg-transparent border-border-subtle',
         )}
-        {...props}
       >
         <span
           className={clsx(
-            'inline-block h-[18px] w-[18px] rounded-full bg-white shadow-sm transition-transform duration-200',
-            checked ? 'translate-x-[20px]' : 'translate-x-[2px]',
+            'absolute top-[2px] left-[2px] h-[16px] w-[16px] rounded-full bg-white transition-transform duration-200',
+            checked && 'translate-x-[19px]',
           )}
         />
       </button>

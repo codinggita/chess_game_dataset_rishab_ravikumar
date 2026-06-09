@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 
-/* ── FilterBar per design.md spec ──
+/* ── FilterBar per PRD spec (§5.1) ──
    Groups of filter pill rows
    Active: gold bg #C9A84C, text #0B0B0E, × to clear
    Inactive: border, text-secondary
@@ -24,8 +24,8 @@ export default function FilterBar({ groups, onClearAll, className, ...props }) {
                 className={clsx(
                   'inline-flex items-center gap-1 rounded-[4px] px-2.5 py-1 text-[11px] font-medium uppercase transition-colors',
                   opt.active
-                    ? 'bg-accent-gold text-[#0B0B0E]'
-                    : 'border border-border-default bg-transparent text-text-secondary hover:bg-accent-gold/8 hover:border-accent-gold hover:text-accent-gold',
+                    ? 'bg-gold-primary text-[#0B0B0E]'
+                    : 'border border-border-subtle bg-transparent text-text-secondary hover:bg-gold-primary/8 hover:border-gold-primary hover:text-gold-primary',
                 )}
               >
                 {opt.label}

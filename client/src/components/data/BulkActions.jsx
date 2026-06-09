@@ -11,7 +11,7 @@ export default function BulkActions({ selectedCount = 0, actions = [], className
   return (
     <div
       className={clsx(
-        'flex items-center gap-4 border border-border-default bg-bg-elevated px-4 py-3',
+        'flex items-center gap-4 border border-border-subtle bg-bg-elevated px-4 py-3',
         'animate-[fade-in-up_150ms_ease-out]',
         className,
       )}

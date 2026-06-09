@@ -1,55 +1,44 @@
 import clsx from 'clsx';
 
-/* ── Tabs per design.md spec ──
-   Variants: underline | pill
-   Underline: gold underline + gold text active
-   Pill: gold bg active
+/* ── Tabs per PRD spec (§5.1) ──
+   Variants: underline (gold line), pill (gold filled)
 */
-export default function Tabs({
-  tabs,
-  activeTab,
-  onChange,
-  variant = 'underline',
-  className,
-  ...props
-}) {
+
+export default function Tabs({ tabs = [], activeTab, onChange, variant = 'underline', className }) {
+  if (!tabs.length) return null;
+
   return (
     <div
       className={clsx(
-        'flex',
-        variant === 'underline' && 'border-b border-border-default',
-        variant === 'pill' && 'gap-1',
+        'flex items-center gap-0',
+        variant === 'underline' && 'border-b border-border-subtle',
         className,
       )}
-      role="tablist"
-      {...props}
     >
       {tabs.map((tab) => {
-        const isActive = tab.value === activeTab;
+        const isActive = activeTab === tab.value;
         const id = typeof tab === 'string' ? tab : tab.value;
         const label = typeof tab === 'string' ? tab : tab.label;
 
         return (
           <button
             key={id}
-            role="tab"
-            aria-selected={isActive}
-            onClick={() => onChange(id)}
+            onClick={() => onChange?.(id)}
             className={clsx(
-              'whitespace-nowrap px-4 py-2 text-[13px] font-medium transition-colors',
+              'px-4 py-2 text-[13px] font-medium uppercase tracking-[0.05em] transition-all duration-150',
               variant === 'underline' && [
-                'border-b-2 -mb-[1px]',
-                isActive
-                  ? 'border-accent-gold text-accent-gold'
-                  : 'border-transparent text-text-secondary hover:text-text-primary',
+                'border-b-2 text-text-secondary hover:text-text-primary',
+                isActive ? 'border-gold-primary text-gold-primary' : 'border-transparent',
               ],
               variant === 'pill' && [
                 'rounded-[4px] px-4 py-1.5',
                 isActive
-                  ? 'bg-accent-gold text-[#0B0B0E] font-semibold'
-                  : 'text-text-secondary hover:bg-bg-elevated hover:text-text-primary',
+                  ? 'bg-gold-primary text-[#0B0B0E] font-semibold'
+                  : 'text-text-secondary hover:text-text-primary',
               ],
             )}
+            aria-selected={isActive}
+            role="tab"
           >
             {label}
           </button>

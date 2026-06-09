@@ -1,14 +1,15 @@
 import clsx from 'clsx';
 
-/* ── Variant map per design.md badge spec ──
+/* ── Variant map per PRD badge spec (§5.1) ──
    Each: [bg, text, border-color] with exact design tokens
    Prefixes: ♔ white-win, ♚ black-win, = draw
+   13 variants — 9 from PRD + 4 extended for admin/status UI
 */
 const variantConfig = {
   'white-win': {
-    bg: 'bg-accent-gold/8',
-    text: 'text-accent-gold',
-    border: 'border-accent-gold',
+    bg: 'bg-gold-primary/8',
+    text: 'text-gold-primary',
+    border: 'border-gold-primary',
     prefix: '\u2654',
   },
   'black-win': {
@@ -19,50 +20,50 @@ const variantConfig = {
   },
   draw: {
     bg: 'bg-[rgba(107,122,255,0.08)]',
-    text: 'text-info-blue',
-    border: 'border-info-blue',
+    text: 'text-data-neutral',
+    border: 'border-data-neutral',
     prefix: '\u003D',
   },
   checkmate: {
     bg: 'bg-[rgba(45,212,160,0.08)]',
-    text: 'text-success-green',
-    border: 'border-success-green',
+    text: 'text-data-positive',
+    border: 'border-data-positive',
     prefix: '',
   },
   resign: {
     bg: 'bg-[rgba(245,158,11,0.08)]',
-    text: 'text-warning-amber',
-    border: 'border-warning-amber',
+    text: 'text-data-warning',
+    border: 'border-data-warning',
     prefix: '',
   },
   timeout: {
     bg: 'bg-[rgba(240,82,82,0.08)]',
-    text: 'text-error-red',
-    border: 'border-error-red',
+    text: 'text-data-negative',
+    border: 'border-data-negative',
     prefix: '',
   },
   rated: {
     bg: 'bg-[rgba(124,77,255,0.08)]',
-    text: 'text-[#7C4DFF]',
-    border: 'border-[#7C4DFF]',
+    text: 'text-purple-primary',
+    border: 'border-purple-primary',
     prefix: '',
   },
   eco: {
     bg: 'bg-transparent',
-    text: 'text-accent-gold',
-    border: 'border-accent-gold',
+    text: 'text-gold-primary',
+    border: 'border-gold-primary',
     prefix: '',
   },
   pill: {
-    bg: 'bg-accent-gold/10',
-    text: 'text-accent-gold',
-    border: 'border-accent-gold/30',
+    bg: 'bg-gold-primary/10',
+    text: 'text-gold-primary',
+    border: 'border-gold-primary/30',
     prefix: '',
   },
   admin: {
-    bg: 'bg-accent-gold/8',
-    text: 'text-accent-gold',
-    border: 'border-accent-gold',
+    bg: 'bg-gold-primary/8',
+    text: 'text-gold-primary',
+    border: 'border-gold-primary',
     prefix: '',
   },
   user: {
@@ -73,27 +74,27 @@ const variantConfig = {
   },
   active: {
     bg: 'bg-[rgba(45,212,160,0.08)]',
-    text: 'text-success-green',
-    border: 'border-success-green',
+    text: 'text-data-positive',
+    border: 'border-data-positive',
     prefix: '',
     dot: true,
   },
   banned: {
     bg: 'bg-[rgba(240,82,82,0.08)]',
-    text: 'text-error-red',
-    border: 'border-error-red',
+    text: 'text-data-negative',
+    border: 'border-data-negative',
     prefix: '',
   },
   'most-used': {
-    bg: 'bg-accent-gold',
+    bg: 'bg-gold-primary',
     text: 'text-[#0B0B0E]',
     border: 'border-transparent',
     prefix: '',
   },
   live: {
-    bg: 'bg-accent-gold/10',
-    text: 'text-accent-gold',
-    border: 'border-accent-gold/25',
+    bg: 'bg-gold-primary/10',
+    text: 'text-gold-primary',
+    border: 'border-gold-primary/25',
     prefix: '',
     pulsing: true,
   },
@@ -124,10 +125,10 @@ export default function Badge({ children, variant = 'pill', className }) {
       )}
     >
       {isActive && (
-        <span className="mr-[4px] h-[6px] w-[6px] rounded-full bg-success-green animate-pulse" />
+        <span className="mr-[4px] h-[6px] w-[6px] rounded-full bg-data-positive animate-pulse" />
       )}
       {isLive && (
-        <span className="mr-[4px] h-[6px] w-[6px] rounded-full bg-accent-gold animate-pulse" />
+        <span className="mr-[4px] h-[6px] w-[6px] rounded-full bg-gold-primary animate-pulse" />
       )}
       {cfg.prefix && <span className="mr-[3px]">{cfg.prefix}</span>}
       {children}

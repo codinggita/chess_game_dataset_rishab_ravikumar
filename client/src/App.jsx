@@ -89,20 +89,17 @@ function App() {
     {
       label: 'Archive',
       variant: 'secondary',
-      onClick: () =>
-        showToast('info', { title: 'Archived', body: `${rowSelection.length} rows archived.` }),
+      onClick: () => showToast('Archived selected rows.', 'info'),
     },
     {
       label: 'Delete',
       variant: 'danger',
-      onClick: () =>
-        showToast('error', { title: 'Deleted', body: `${rowSelection.length} rows deleted.` }),
+      onClick: () => showToast('Deleted selected rows.', 'error'),
     },
     {
       label: 'Export',
       variant: 'ghost',
-      onClick: () =>
-        showToast('success', { title: 'Exported', body: `${rowSelection.length} rows exported.` }),
+      onClick: () => showToast('Exported selected rows.', 'success'),
     },
   ];
 
@@ -189,13 +186,13 @@ function App() {
           <ComponentSection title="Cards">
             <div className="grid grid-cols-3 gap-4">
               <Card header="Total Matches">
-                <p className="font-mono text-2xl text-accent-gold">20,058</p>
+                <p className="font-mono text-2xl text-gold-primary">20,058</p>
               </Card>
               <Card variant="featured" header="Win Rate">
-                <p className="font-mono text-2xl text-success-green">54.2%</p>
+                <p className="font-mono text-2xl text-data-positive">54.2%</p>
               </Card>
               <Card variant="interactive" header="Active Players">
-                <p className="font-mono text-2xl text-info-blue">14,320</p>
+                <p className="font-mono text-2xl text-data-neutral">14,320</p>
               </Card>
             </div>
           </ComponentSection>
@@ -229,9 +226,7 @@ function App() {
                   title="No players"
                   body="Import data to get started."
                   ctaLabel="Import"
-                  onCtaClick={() =>
-                    showToast('info', { title: 'Import', body: 'Opening import dialog...' })
-                  }
+                  onCtaClick={() => showToast('Opening import dialog...', 'info')}
                 />
               </Card>
             </div>
@@ -247,7 +242,7 @@ function App() {
                 <Button
                   key={t}
                   variant="ghost"
-                  onClick={() => showToast(t, { title: t, body: 'Demo notification.' })}
+                  onClick={() => showToast('Demo notification.', t)}
                 >
                   {t.charAt(0).toUpperCase() + t.slice(1)}
                 </Button>
@@ -259,7 +254,7 @@ function App() {
             <Pagination
               page={page}
               totalPages={12}
-              totalItems={20058}
+              total={20058}
               pageSize={10}
               onPageChange={setPage}
             />
@@ -300,7 +295,7 @@ function App() {
 
       {/* Modals */}
       <Modal
-        isOpen={modalOpen}
+        open={modalOpen}
         onClose={() => setModalOpen(false)}
         title="Match Details"
         footer={
@@ -318,10 +313,10 @@ function App() {
         </div>
       </Modal>
       <Modal
-        isOpen={deleteOpen}
+        open={deleteOpen}
         onClose={() => setDeleteOpen(false)}
         title="Delete Match?"
-        variant="delete"
+        variant="delete-confirm"
         footer={
           <>
             <Button variant="ghost" onClick={() => setDeleteOpen(false)}>
@@ -331,7 +326,7 @@ function App() {
               variant="danger"
               onClick={() => {
                 setDeleteOpen(false);
-                showToast('error', { title: 'Deleted', body: 'Match removed.' });
+                showToast('Match removed.', 'error');
               }}
             >
               Delete
@@ -339,7 +334,7 @@ function App() {
           </>
         }
       >
-        <p className="text-[14px] text-error-red">This action cannot be undone.</p>
+        <p className="text-[14px] text-data-negative">This action cannot be undone.</p>
       </Modal>
     </div>
   );
