@@ -4,6 +4,7 @@ import clsx from 'clsx';
 /* ── Toast config per PRD spec ──
    Variants: success, error, warning, info
    Each has: 3px left border, progress bar, icon
+   Responsive: 320px desktop, full-width-16px mobile, bottom-center
 */
 
 const variantConfig = {
@@ -39,18 +40,20 @@ export function showToast(message, variant = 'info', duration = 4000) {
     (t) => (
       <div
         className={clsx(
-          'relative flex w-[320px] items-start gap-3 overflow-hidden rounded-[6px] border border-border-strong bg-bg-elevated p-4',
+          'relative flex items-start gap-3 overflow-hidden rounded-[6px] border border-border-strong bg-bg-elevated p-4',
+          /* Desktop: 320px | Mobile: full width minus 16px margin */
+          'w-[calc(100vw-16px)] sm:w-[320px]',
           'shadow-[0_0_0_1px_rgba(201,168,76,0.08)]',
-          t.visible ? 'animate-slide-in-right' : 'animate-fade-out',
+          t.visible ? 'animate-slide-in-up' : 'animate-fade-out',
           cfg.borderColor,
         )}
         style={{ borderLeftWidth: '3px' }}
       >
-        <span className={clsx('mt-[1px] text-[14px]', cfg.iconColor)}>{cfg.icon}</span>
+        <span className={clsx('mt-[1px] text-[14px] flex-shrink-0', cfg.iconColor)}>{cfg.icon}</span>
         <span className="flex-1 text-[13px] leading-[1.4] text-text-primary">{message}</span>
         <button
           onClick={() => toast.dismiss(id)}
-          className="text-[14px] text-text-tertiary hover:text-text-primary"
+          className="text-[14px] text-text-tertiary hover:text-text-primary flex-shrink-0"
           aria-label="Dismiss"
         >
           ✕

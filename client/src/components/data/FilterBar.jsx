@@ -12,8 +12,8 @@ export default function FilterBar({ groups, onClearAll, className, ...props }) {
   return (
     <div className={clsx('flex flex-wrap items-start gap-4', className)} {...props}>
       {groups.map((group) => (
-        <div key={group.label} className="flex items-center gap-2">
-          <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-text-tertiary">
+        <div key={group.label} className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-2">
+          <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-text-tertiary whitespace-nowrap">
             {group.label}:
           </span>
           <div className="flex flex-wrap gap-1">

@@ -4,6 +4,20 @@
 @import './chess-texture.css';
 @import './animations.css';
 
+/* ── Custom animation utilities ── */
+@utility animate-slide-in-up {
+  animation: slide-in-up 300ms ease-out;
+}
+@utility animate-slide-in-right {
+  animation: slide-in-right 300ms ease-out;
+}
+@utility animate-fade-out {
+  animation: fade-out 200ms ease-in forwards;
+}
+@utility animate-shrink-width {
+  animation: shrink-width linear forwards;
+}
+
 /* ── Tailwind 4 Theme Configuration ──
    Maps design tokens to Tailwind utility classes.
    Also generates CSS variables on :root for var() usage. */

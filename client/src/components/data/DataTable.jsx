@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { DataGrid } from '@mui/x-data-grid';
 import { Spinner } from '../ui';
 
@@ -41,37 +42,46 @@ export default function DataTable({
   getRowId,
   pageSize = 25,
   className,
+  stickyFirstColumn,
   ...props
 }) {
+  /* Pin first column for mobile scroll if requested */
+  const pinnedColumns = stickyFirstColumn && columns.length > 0
+    ? { left: [columns[0].field] }
+    : undefined;
+
   return (
-    <div className={className}>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        loading={loading}
-        checkboxSelection={checkboxSelection}
-        disableRowSelectionOnClick
-        onRowSelectionModelChange={onRowSelectionModelChange}
-        rowSelectionModel={rowSelectionModel}
-        getRowId={getRowId}
-        initialState={{
-          pagination: { paginationModel: { pageSize } },
-        }}
-        pageSizeOptions={[10, 25, 50]}
-        slots={{
-          loadingOverlay: CustomLoading,
-          noRowsOverlay: CustomEmpty,
-        }}
-        autoHeight
-        density="compact"
-        sx={{
-          '& .MuiDataGrid-cell:focus': { outline: 'none' },
-          '& .MuiDataGrid-cell:focus-within': { outline: 'none' },
-          '& .MuiDataGrid-columnHeader:focus': { outline: 'none' },
-          '& .MuiDataGrid-columnHeader:focus-within': { outline: 'none' },
-        }}
-        {...props}
-      />
+    <div className={clsx('overflow-x-auto', className)}>
+      <div className="min-w-[600px]">
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          loading={loading}
+          checkboxSelection={checkboxSelection}
+          disableRowSelectionOnClick
+          onRowSelectionModelChange={onRowSelectionModelChange}
+          rowSelectionModel={rowSelectionModel}
+          getRowId={getRowId}
+          initialState={{
+            pagination: { paginationModel: { pageSize } },
+            pinnedColumns,
+          }}
+          pageSizeOptions={[10, 25, 50]}
+          slots={{
+            loadingOverlay: CustomLoading,
+            noRowsOverlay: CustomEmpty,
+          }}
+          autoHeight
+          density="compact"
+          sx={{
+            '& .MuiDataGrid-cell:focus': { outline: 'none' },
+            '& .MuiDataGrid-cell:focus-within': { outline: 'none' },
+            '& .MuiDataGrid-columnHeader:focus': { outline: 'none' },
+            '& .MuiDataGrid-columnHeader:focus-within': { outline: 'none' },
+          }}
+          {...props}
+        />
+      </div>
     </div>
   );
 }

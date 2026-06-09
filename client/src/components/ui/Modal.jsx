@@ -4,6 +4,7 @@ import clsx from 'clsx';
 /* ── Modal per PRD spec (§5.1) ──
    Variants: default, delete-confirm
    Backdrop blur, Escape closes, focus trap
+   Responsive: 95vw mobile, bottom-sheet on xs, max-h 90vh scroll
 */
 
 export default function Modal({
@@ -18,7 +19,6 @@ export default function Modal({
   const modalRef = useRef(null);
   const isDelete = variant === 'delete-confirm';
 
-  /* ── Escape to close ── */
   useEffect(() => {
     if (!open) return;
     const handleKey = (e) => {
@@ -28,18 +28,25 @@ export default function Modal({
     return () => document.removeEventListener('keydown', handleKey);
   }, [open, onClose]);
 
-  /* ── Focus trap ── */
   useEffect(() => {
     if (open) {
+      document.body.style.overflow = 'hidden';
       setTimeout(() => modalRef.current?.focus(), 50);
+    } else {
+      document.body.style.overflow = '';
     }
+    return () => { document.body.style.overflow = ''; };
   }, [open]);
 
   if (!open) return null;
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-[rgba(0,0,0,0.75)] backdrop-blur-sm"
+      <div
+        className={clsx(
+          'fixed inset-0 z-50 bg-[rgba(0,0,0,0.75)] backdrop-blur-sm',
+          /* Below sm: bottom-sheet | sm+: centered */
+          'flex items-end sm:items-center justify-center',
+        )}
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose?.();
       }}
@@ -51,43 +58,47 @@ export default function Modal({
         aria-modal="true"
         aria-label={title}
         className={clsx(
-          'w-full max-w-[460px] rounded-[8px] border border-border-strong bg-bg-elevated',
+          /* Base: 95vw, capped at 460px, max 90vh */
+          'w-[95vw] max-w-[460px] max-h-[90vh] flex flex-col',
+          /* Desktop: 8px radius | <sm: bottom-sheet rounded top only */
+          'rounded-t-[12px] sm:rounded-[8px]',
+          'border border-border-strong bg-bg-elevated',
           'focus-visible:outline-none',
           className,
         )}
       >
-        {/* ── Header ── */}
+        {/* ── Header (sticky) ── */}
         <div
           className={clsx(
-            'flex items-center justify-between border-b px-6 pb-4 pt-5',
+            'flex items-center justify-between border-b px-6 pb-4 pt-5 flex-shrink-0',
             isDelete ? 'border-b-data-negative/30' : 'border-b-border-subtle',
           )}
         >
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 min-w-0">
             {isDelete && (
-              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-data-negative/10 text-xl">
+              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-data-negative/10 text-xl flex-shrink-0">
                 ⚠
               </span>
             )}
-            <h2 className="text-[16px] font-semibold text-text-primary">{title}</h2>
+            <h2 className="text-[16px] font-semibold text-text-primary truncate">{title}</h2>
           </div>
           <button
             onClick={onClose}
-            className="flex h-7 w-7 items-center justify-center rounded-[4px] text-text-tertiary hover:bg-bg-hover hover:text-text-primary"
+            className="flex h-7 w-7 items-center justify-center rounded-[4px] text-text-tertiary hover:bg-bg-hover hover:text-text-primary flex-shrink-0"
             aria-label="Close modal"
           >
             ✕
           </button>
         </div>
 
-        {/* ── Body ── */}
-        <div className="px-6 py-5">{children}</div>
+        {/* ── Body (scrollable) ── */}
+        <div className="overflow-y-auto px-6 py-5">{children}</div>
 
         {/* ── Footer ── */}
         {footer && (
           <div
             className={clsx(
-              'flex items-center justify-end gap-3 px-6 pb-5 pt-0',
+              'flex items-center justify-end gap-3 px-6 pb-5 pt-0 flex-shrink-0 flex-wrap',
               !isDelete && 'border-t border-border-subtle pt-4',
             )}
           >

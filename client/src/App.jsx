@@ -16,7 +16,7 @@ import {
   Select,
 } from './components/ui';
 import { DataTable, FilterBar, BulkActions } from './components/data';
-import { Sidebar } from './components/layout';
+import { MainLayout } from './components/layout';
 
 const demoColumns = [
   { field: 'id', headerName: 'ID', width: 100 },
@@ -104,30 +104,26 @@ function App() {
   ];
 
   return (
-    <div className="min-h-screen bg-bg-base">
-      {/* ── Sidebar ── */}
-      <Sidebar
-        activePath={activePath}
-        onNavigate={setActivePath}
-        userName="Rishab"
-        userRole="admin"
+    <MainLayout
+      userName="Rishab"
+      userRole="admin"
+      activePath={activePath}
+      onNavigate={setActivePath}
+      breadcrumbs={[
+        { label: 'Matches', href: '/matches' },
+        { label: 'B20 Sicilian' },
+      ]}
+    >
+      <Breadcrumb
+        items={[
+          { label: 'Dashboard', href: '/' },
+          { label: 'Matches', href: '/matches' },
+          { label: 'B20 Sicilian' },
+        ]}
       />
 
-      {/* ── Main content offset by sidebar width ── */}
-      <div className="ml-[220px] p-8">
+      <ComponentSection title="Components Demo">
         <div className="mx-auto max-w-5xl space-y-10">
-          <h1 className="font-display text-3xl font-bold text-text-primary">ChessIQ Analytics</h1>
-
-          <ComponentSection title="Breadcrumb">
-            <Breadcrumb
-              items={[
-                { label: 'Dashboard', href: '/' },
-                { label: 'Matches', href: '/matches' },
-                { label: 'B20 Sicilian' },
-              ]}
-            />
-          </ComponentSection>
-
           <ComponentSection title="Buttons">
             <div className="flex flex-wrap gap-3">
               <Button>Primary</Button>
@@ -291,7 +287,7 @@ function App() {
             />
           </ComponentSection>
         </div>
-      </div>
+      </ComponentSection>
 
       {/* Modals */}
       <Modal
@@ -336,7 +332,7 @@ function App() {
       >
         <p className="text-[14px] text-data-negative">This action cannot be undone.</p>
       </Modal>
-    </div>
+    </MainLayout>
   );
 }
 

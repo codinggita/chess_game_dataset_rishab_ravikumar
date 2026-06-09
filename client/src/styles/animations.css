@@ -54,3 +54,47 @@
     opacity: 0.3;
   }
 }
+
+/* Toast slide in from bottom (mobile) */
+@keyframes slide-in-up {
+  0% {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Toast slide in from right (desktop) */
+@keyframes slide-in-right {
+  0% {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Toast fade out */
+@keyframes fade-out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Progress bar shrink over duration */
+@keyframes shrink-width {
+  0% {
+    width: 100%;
+  }
+  100% {
+    width: 0%;
+  }
+}
