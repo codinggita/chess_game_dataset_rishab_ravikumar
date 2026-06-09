@@ -12,3 +12,4 @@ export { default as Tabs } from './Tabs';
 export { default as Breadcrumb } from './Breadcrumb';
 export { default as Toggle } from './Toggle';
 export { default as Select } from './Select';
+export { default as PageHeader } from './PageHeader';

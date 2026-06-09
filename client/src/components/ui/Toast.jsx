@@ -1,87 +1,70 @@
-/* eslint-disable react-refresh/only-export-components */
 import toast from 'react-hot-toast';
 import clsx from 'clsx';
 
-/* ── Toast per design.md spec ──
-   320px, bg #1A1A22, 3px left border, icon, close X,
-   progress bar (2px, 4s shrink), auto-dismiss 4s
+/* ── Toast config per PRD spec ──
+   Variants: success, error, warning, info
+   Each has: 3px left border, progress bar, icon
 */
-const typeConfig = {
+
+const variantConfig = {
   success: {
-    icon: '\u2713',
-    borderColor: 'border-l-success-green',
-    iconColor: 'text-success-green',
-    progressColor: 'bg-success-green',
+    borderColor: 'border-l-data-positive',
+    iconColor: 'text-data-positive',
+    progressColor: 'bg-data-positive',
+    icon: '✓',
   },
   error: {
-    icon: '\u2717',
-    borderColor: 'border-l-error-red',
-    iconColor: 'text-error-red',
-    progressColor: 'bg-error-red',
+    borderColor: 'border-l-data-negative',
+    iconColor: 'text-data-negative',
+    progressColor: 'bg-data-negative',
+    icon: '✕',
   },
   warning: {
-    icon: '\u26A0',
-    borderColor: 'border-l-warning-amber',
-    iconColor: 'text-warning-amber',
-    progressColor: 'bg-warning-amber',
+    borderColor: 'border-l-data-warning',
+    iconColor: 'text-data-warning',
+    progressColor: 'bg-data-warning',
+    icon: '⚠',
   },
   info: {
-    icon: '\u2139',
-    borderColor: 'border-l-info-blue',
-    iconColor: 'text-info-blue',
-    progressColor: 'bg-info-blue',
+    borderColor: 'border-l-data-neutral',
+    iconColor: 'text-data-neutral',
+    progressColor: 'bg-data-neutral',
+    icon: 'ℹ',
   },
 };
 
-function ToastContent({ type, title, body, onClose }) {
-  const cfg = typeConfig[type];
-
-  return (
-    <div
-      className={clsx(
-        'relative flex w-[320px] items-start gap-3 overflow-hidden rounded-[6px] border border-border-default bg-bg-elevated p-4',
-        'border-l-3',
-        'shadow-[0_4px_12px_rgba(0,0,0,0.3)]',
-        'animate-[fade-in-up_200ms_ease-out]',
-        cfg.borderColor,
-      )}
-    >
-      {/* Icon */}
-      <span className={clsx('mt-px text-base leading-none', cfg.iconColor)}>{cfg.icon}</span>
-
-      {/* Text */}
-      <div className="flex-1">
-        {title && (
-          <p className="text-[14px] font-medium leading-tight text-text-primary">{title}</p>
-        )}
-        {body && <p className="mt-1 text-[13px] leading-snug text-text-secondary">{body}</p>}
-      </div>
-
-      {/* Close */}
-      <button
-        onClick={onClose}
-        aria-label="Dismiss"
-        className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded text-text-tertiary transition-colors hover:text-text-primary"
-      >
-        ✕
-      </button>
-
-      {/* Progress bar */}
-      <span
-        className={clsx(
-          'absolute bottom-0 left-0 h-[2px] animate-[toast-progress_4s_linear]',
-          cfg.progressColor,
-        )}
-      />
-    </div>
-  );
-}
-
-export function showToast(type, { title, body, duration = 4000 }) {
-  toast.custom(
+export function showToast(message, variant = 'info', duration = 4000) {
+  const cfg = variantConfig[variant];
+  const id = toast.custom(
     (t) => (
-      <ToastContent type={type} title={title} body={body} onClose={() => toast.dismiss(t.id)} />
+      <div
+        className={clsx(
+          'relative flex w-[320px] items-start gap-3 overflow-hidden rounded-[6px] border border-border-strong bg-bg-elevated p-4',
+          'shadow-[0_0_0_1px_rgba(201,168,76,0.08)]',
+          t.visible ? 'animate-slide-in-right' : 'animate-fade-out',
+          cfg.borderColor,
+        )}
+        style={{ borderLeftWidth: '3px' }}
+      >
+        <span className={clsx('mt-[1px] text-[14px]', cfg.iconColor)}>{cfg.icon}</span>
+        <span className="flex-1 text-[13px] leading-[1.4] text-text-primary">{message}</span>
+        <button
+          onClick={() => toast.dismiss(id)}
+          className="text-[14px] text-text-tertiary hover:text-text-primary"
+          aria-label="Dismiss"
+        >
+          ✕
+        </button>
+        {/* Progress bar */}
+        <span
+          className={clsx('absolute bottom-0 left-0 h-[2px] animate-shrink-width', cfg.progressColor)}
+          style={{ animationDuration: `${duration}ms` }}
+        />
+      </div>
     ),
-    { duration, position: 'top-right' },
+    { duration },
   );
+  return id;
 }
+
+export default toast;

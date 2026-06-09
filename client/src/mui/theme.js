@@ -1,9 +1,9 @@
 import { createTheme } from '@mui/material/styles';
 
 /* ───────────────────────────────────────────────
-   ChessIQ Analytics — MUI Theme (Dark Mode Only)
-   Matches design.md tokens exactly.
-   PRD Rule #5: No light mode exists.
+   ChessIQ Analytics — MUI Theme (Dark Default)
+   Matches CHESSIQ-FRONTEND-PRD.md tokens exactly.
+   PRD Rule #14: Dark mode is default. Light mode is optional toggle.
    ─────────────────────────────────────────────── */
 
 const theme = createTheme({

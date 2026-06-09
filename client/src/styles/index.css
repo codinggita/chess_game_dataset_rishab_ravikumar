@@ -10,32 +10,28 @@
 @theme {
   /* ── Colors ── */
   --color-bg-base: var(--color-bg-base);
-  --color-bg-deep: var(--color-bg-deep);
+  --color-bg-secondary: var(--color-bg-secondary);
   --color-bg-surface: var(--color-bg-surface);
   --color-bg-elevated: var(--color-bg-elevated);
   --color-bg-hover: var(--color-bg-hover);
   --color-bg-row-hover: var(--color-bg-row-hover);
   --color-bg-input: var(--color-bg-input);
   --color-border-subtle: var(--color-border-subtle);
-  --color-border-default: var(--color-border-default);
   --color-border-strong: var(--color-border-strong);
   --color-text-primary: var(--color-text-primary);
   --color-text-secondary: var(--color-text-secondary);
   --color-text-tertiary: var(--color-text-tertiary);
-  --color-accent-gold: var(--color-accent-gold);
-  --color-accent-gold-hover: var(--color-accent-gold-hover);
+  --color-text-gold: var(--color-text-gold);
+  --color-gold-primary: var(--color-gold-primary);
+  --color-gold-hover: var(--color-gold-hover);
   --color-gold-dim: var(--color-gold-dim);
   --color-gold-glow: var(--color-gold-glow);
-  --color-gold-glow-strong: var(--color-gold-glow-strong);
-  --color-gold-border-soft: var(--color-gold-border-soft);
-  --color-gold-border-mid: var(--color-gold-border-mid);
-  --color-gold-border-featured: var(--color-gold-border-featured);
   --color-purple-primary: var(--color-purple-primary);
   --color-purple-dim: var(--color-purple-dim);
-  --color-success-green: var(--color-success-green);
-  --color-error-red: var(--color-error-red);
-  --color-warning-amber: var(--color-warning-amber);
-  --color-info-blue: var(--color-info-blue);
+  --color-data-positive: var(--color-data-positive);
+  --color-data-negative: var(--color-data-negative);
+  --color-data-neutral: var(--color-data-neutral);
+  --color-data-warning: var(--color-data-warning);
 
   /* ── Font Families ── */
   --font-family-ui: var(--font-family-ui);
