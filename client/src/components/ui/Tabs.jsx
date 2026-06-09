@@ -10,7 +10,9 @@ export default function Tabs({ tabs = [], activeTab, onChange, variant = 'underl
   return (
     <div
       className={clsx(
-        'flex items-center gap-0',
+        'flex items-center gap-0 overflow-x-auto',
+        /* Hide scrollbar by default but allow scroll on touch */
+        '[&::-webkit-scrollbar]:h-0 [&::-webkit-scrollbar]:bg-transparent',
         variant === 'underline' && 'border-b border-border-subtle',
         className,
       )}
@@ -25,7 +27,7 @@ export default function Tabs({ tabs = [], activeTab, onChange, variant = 'underl
             key={id}
             onClick={() => onChange?.(id)}
             className={clsx(
-              'px-4 py-2 text-[13px] font-medium uppercase tracking-[0.05em] transition-all duration-150',
+              'flex-shrink-0 px-4 py-2 text-[13px] font-medium uppercase tracking-[0.05em] transition-all duration-150',
               variant === 'underline' && [
                 'border-b-2 text-text-secondary hover:text-text-primary',
                 isActive ? 'border-gold-primary text-gold-primary' : 'border-transparent',

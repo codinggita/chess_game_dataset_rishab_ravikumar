@@ -96,7 +96,7 @@ export default function Sidebar({
           )}
         </div>
 
-        {/* ── Navigation: flat items, 40px each ── */}
+        {/* ── Navigation + User card (scrolls on mobile, sticky on desktop) ── */}
         <nav className="relative z-10 flex-1 overflow-y-auto py-3">
           <div className="flex flex-col gap-1">
             {visibleItems.map((item) => {
@@ -139,50 +139,50 @@ export default function Sidebar({
               );
             })}
           </div>
-        </nav>
 
-        {/* ── User card: 56px pinned bottom ── */}
-        <div
-          className={clsx(
-            'relative z-10 border-t border-border-subtle bg-bg-secondary',
-            collapsed ? 'p-2' : 'p-4',
-          )}
-        >
+          {/* ── User card: sticky bottom on desktop, scrolls with content on mobile ── */}
           <div
             className={clsx(
-              'flex items-center',
-              collapsed ? 'justify-center' : 'gap-3 px-2',
+              'sticky bottom-0 border-t border-border-subtle bg-bg-secondary mt-4',
+              collapsed ? 'p-2' : 'p-4',
             )}
           >
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gold-primary text-[13px] font-bold text-[#0B0B0E] flex-shrink-0">
-              {userName.charAt(0).toUpperCase()}
-            </div>
-            {!collapsed && (
-              <>
-                <div className="flex-1 min-w-0">
-                  <p className="truncate text-[13px] font-medium text-text-primary">{userName}</p>
-                  <span
-                    className={clsx(
-                      'inline-block rounded-sm px-1.5 py-[1px] text-[10px] font-semibold uppercase tracking-[0.05em]',
-                      userRole === 'admin'
-                        ? 'border border-gold-primary/40 text-gold-primary'
-                        : 'border border-border-strong text-text-tertiary',
-                    )}
+            <div
+              className={clsx(
+                'flex items-center',
+                collapsed ? 'justify-center' : 'gap-3 px-2',
+              )}
+            >
+              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gold-primary text-[13px] font-bold text-[#0B0B0E] flex-shrink-0">
+                {userName.charAt(0).toUpperCase()}
+              </div>
+              {!collapsed && (
+                <>
+                  <div className="flex-1 min-w-0">
+                    <p className="truncate text-[13px] font-medium text-text-primary">{userName}</p>
+                    <span
+                      className={clsx(
+                        'inline-block rounded-sm px-1.5 py-[1px] text-[10px] font-semibold uppercase tracking-[0.05em]',
+                        userRole === 'admin'
+                          ? 'border border-gold-primary/40 text-gold-primary'
+                          : 'border border-border-strong text-text-tertiary',
+                      )}
+                    >
+                      {userRole === 'admin' ? 'ADMIN' : 'USER'}
+                    </span>
+                  </div>
+                  <button
+                    onClick={() => onNavigate?.('/profile')}
+                    className="flex h-7 w-7 items-center justify-center rounded-md text-text-tertiary transition-colors hover:text-text-primary"
+                    aria-label="Profile"
                   >
-                    {userRole === 'admin' ? 'ADMIN' : 'USER'}
-                  </span>
-                </div>
-                <button
-                  onClick={() => onNavigate?.('/profile')}
-                  className="flex h-7 w-7 items-center justify-center rounded-md text-text-tertiary transition-colors hover:text-text-primary"
-                  aria-label="Profile"
-                >
-                  ⚙
-                </button>
-              </>
-            )}
+                    ⚙
+                  </button>
+                </>
+              )}
+            </div>
           </div>
-        </div>
+        </nav>
       </aside>
     </>
   );
