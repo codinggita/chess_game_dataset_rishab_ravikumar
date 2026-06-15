@@ -1,13 +1,13 @@
 /* ── AppRouter ──
    Routes all 14 pages with lazy loading, Suspense, and layout nesting.
-   Auth guards (ProtectedRoute, AdminRoute) are pass-through placeholders
-   until PR 14 wires them to Redux auth state.
+   Auth guards wired to Redux auth state.
 
    Structure:
-     Public routes       → no layout
-     Protected routes    → ProtectedRoute → MainLayout → <Outlet />
-     Admin routes        → ProtectedRoute → MainLayout → AdminRoute → <Outlet />
-     404 catch-all       → NotFound
+     Public guest routes  → AuthGuard → Login / Register
+     Public routes        → Landing
+     Protected routes     → ProtectedRoute → MainLayout → <Outlet />
+     Admin routes         → ProtectedRoute → MainLayout → AdminRoute → <Outlet />
+     404 catch-all        → NotFound
 */
 
 import { lazy, Suspense } from 'react';
@@ -16,6 +16,7 @@ import MainLayout from '../components/layout/MainLayout';
 import Spinner from '../components/ui/Spinner';
 import ProtectedRoute from './ProtectedRoute';
 import AdminRoute from './AdminRoute';
+import AuthGuard from './AuthGuard';
 
 /* ── Lazy-loaded page components ── */
 const Landing = lazy(() => import('../pages/Landing'));
@@ -47,10 +48,14 @@ export default function AppRouter() {
   return (
     <Suspense fallback={<PageLoader />}>
       <Routes>
-        {/* ── Public routes (no layout) ── */}
+        {/* ── Public route (no layout) ── */}
         <Route path="/" element={<Landing />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+
+        {/* ── Guest-only routes (redirect to /dashboard if logged in) ── */}
+        <Route element={<AuthGuard />}>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+        </Route>
 
         {/* ── Protected routes (auth guard + MainLayout) ── */}
         <Route element={<ProtectedRoute />}>
