@@ -1,2 +1,14 @@
-// Barrel export
-export {};
+export { default as Landing } from './Landing';
+export { default as Login } from './Login';
+export { default as Register } from './Register';
+export { default as Dashboard } from './Dashboard';
+export { default as AllMatches } from './AllMatches';
+export { default as MatchView } from './MatchView';
+export { default as Players } from './Players';
+export { default as PlayerProfile } from './PlayerProfile';
+export { default as OpeningsExplorer } from './OpeningsExplorer';
+export { default as Analytics } from './Analytics';
+export { default as AdminPanel } from './AdminPanel';
+export { default as Profile } from './Profile';
+export { default as Settings } from './Settings';
+export { default as NotFound } from './NotFound';
