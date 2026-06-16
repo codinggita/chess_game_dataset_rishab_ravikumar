@@ -1,14 +1,23 @@
+/* ── Dashboard Page ──
+   PR 20: Asymmetric hero stats section.
+   More widgets added in PR 21.
+*/
+
 import { usePageMeta } from '../hooks/usePageMeta';
+import PageHeader from '../components/ui/PageHeader';
+import { HeroStats } from '../features/dashboard';
 
 export default function Dashboard() {
   usePageMeta('Dashboard');
 
   return (
-    <div>
-      <h1 className="font-display text-2xl font-semibold text-text-primary">Dashboard</h1>
-      <p className="mt-2 text-[13px] text-text-tertiary">
-        Dashboard placeholder — PR 13
-      </p>
+    <div className="flex flex-col gap-6 p-6">
+      <PageHeader
+        title="Dashboard"
+        description="Grandmaster's War Room — live chess analytics"
+      />
+
+      <HeroStats />
     </div>
   );
 }

@@ -96,8 +96,8 @@ export default function Sidebar({
           )}
         </div>
 
-        {/* ── Navigation + User card (scrolls on mobile, sticky on desktop) ── */}
-        <nav className="relative z-10 flex-1 overflow-y-auto py-3">
+        {/* ── Navigation + User card ── */}
+        <nav className="relative z-10 py-3">
           <div className="flex flex-col gap-1">
             {visibleItems.map((item) => {
               const isActive = activePath === item.path || activePath.startsWith(item.path + '/');
@@ -140,10 +140,10 @@ export default function Sidebar({
             })}
           </div>
 
-          {/* ── User card: sticky bottom on desktop, scrolls with content on mobile ── */}
+          {/* ── User card ── */}
           <div
             className={clsx(
-              'sticky bottom-0 border-t border-border-subtle bg-bg-secondary mt-4',
+              'border-t border-border-subtle bg-bg-secondary mt-4',
               collapsed ? 'p-2' : 'p-4',
             )}
           >

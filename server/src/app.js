@@ -18,6 +18,9 @@ const middlewareRoutes = require('./routes/middleware.routes');
 
 const app = express();
 
+// Trust proxy — required behind Render's load balancer for accurate rate limiting
+app.set('trust proxy', 1);
+
 // Middleware
 app.use(cors());
 app.use(express.json());
