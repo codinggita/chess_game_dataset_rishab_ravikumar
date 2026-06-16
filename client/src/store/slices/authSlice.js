@@ -19,7 +19,7 @@ export const loginUser = createAsyncThunk(
   async ({ email, password }, { rejectWithValue }) => {
     try {
       const res = await axios.post(`${API_URL}/auth/login`, { email, password });
-      const { token, refreshToken, user } = res.data.data;
+      const { accessToken: token, refreshToken, user } = res.data.data;
       localStorage.setItem('token', token);
       localStorage.setItem('refreshToken', refreshToken);
       return { user, token, refreshToken };
@@ -34,7 +34,7 @@ export const registerUser = createAsyncThunk(
   async ({ name, email, password }, { rejectWithValue }) => {
     try {
       const res = await axios.post(`${API_URL}/auth/register`, { name, email, password });
-      const { token, refreshToken, user } = res.data.data;
+      const { accessToken: token, refreshToken, user } = res.data.data;
       localStorage.setItem('token', token);
       localStorage.setItem('refreshToken', refreshToken);
       return { user, token, refreshToken };
@@ -57,10 +57,10 @@ export const checkAuth = createAsyncThunk(
       return rejectWithValue('No token');
     }
     try {
-      const res = await axios.get(`${API_URL}/auth/me`, {
+      const res = await axios.get(`${API_URL}/auth/profile`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      return { user: res.data.data, token };
+      return { user: res.data.data.profile, token };
     } catch {
       localStorage.removeItem('token');
       localStorage.removeItem('refreshToken');

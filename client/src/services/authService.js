@@ -20,7 +20,7 @@ export const refreshToken = (token) =>
   api.post('/auth/refresh-token', { refreshToken: token }).then(unwrap);
 
 export const getProfile = () =>
-  api.get('/auth/me').then(unwrap);
+  api.get('/auth/profile').then(unwrap);
 
 export const updateProfile = (data) =>
   api.put('/auth/me', data).then(unwrap);

@@ -7,10 +7,10 @@ import { useSelector } from 'react-redux';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import toast from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
 
 import { loginUser } from '../store/slices/authSlice';
+import { showToast } from '../components/ui/Toast';
 import { usePageMeta } from '../hooks/usePageMeta';
 import AuthLayout from '../features/auth/AuthLayout';
 import Input from '../components/ui/Input';
@@ -36,7 +36,7 @@ export default function Login() {
       if (loginUser.fulfilled.match(result)) {
         navigate(from, { replace: true });
       } else {
-        toast.error(result.payload || 'Invalid email or password');
+        showToast(result.payload || 'Invalid email or password', 'error');
       }
     } finally {
       setSubmitting(false);

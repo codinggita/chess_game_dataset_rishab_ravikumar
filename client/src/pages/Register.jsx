@@ -6,10 +6,10 @@
 import { useNavigate } from 'react-router-dom';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import toast from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { registerUser } from '../store/slices/authSlice';
+import { showToast } from '../components/ui/Toast';
 import { usePageMeta } from '../hooks/usePageMeta';
 import AuthLayout from '../features/auth/AuthLayout';
 import PasswordStrengthBar from '../features/auth/PasswordStrengthBar';
@@ -38,10 +38,10 @@ export default function Register() {
         registerUser({ name: values.name, email: values.email, password: values.password }),
       );
       if (registerUser.fulfilled.match(result)) {
-        toast.success('Account created!');
+        showToast('Account created!', 'success');
         navigate('/dashboard', { replace: true });
       } else {
-        toast.error(result.payload || 'Registration failed');
+        showToast(result.payload || 'Registration failed', 'error');
       }
     } finally {
       setSubmitting(false);
