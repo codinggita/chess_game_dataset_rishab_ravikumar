@@ -98,3 +98,14 @@
     width: 0%;
   }
 }
+
+/* Gentle floating for decorative chess pieces (auth pages) */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
