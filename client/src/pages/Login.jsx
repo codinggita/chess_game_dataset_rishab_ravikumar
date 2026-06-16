@@ -33,14 +33,6 @@ const floatingPieces = [
   { symbol: '\u265D', size: 70, opacity: 0.04, top: '45%', left: '35%', delay: 0.3 },
 ];
 
-/* ─── Features ─── */
-
-const features = [
-  '\u265F Player performance analytics',
-  '\u265F Opening analysis & exploration',
-  '\u265F Real-time game statistics',
-];
-
 /* ─── Component ─── */
 
 export default function Login() {
@@ -70,7 +62,7 @@ export default function Login() {
   return (
     <div className="flex min-h-screen">
       {/* ── Left Panel — 60% — Chess Art ── */}
-      <div className="chess-bg chess-bg-auth relative hidden w-[60%] flex-col justify-between overflow-hidden p-10 lg:flex">
+      <div className="chess-bg chess-bg-auth relative hidden w-[60%] flex-col overflow-hidden p-10 lg:flex">
         {/* Floating decorative pieces */}
         {floatingPieces.map((piece, i) => (
           <span
@@ -91,36 +83,34 @@ export default function Login() {
           </span>
         ))}
 
-        {/* Logo */}
-        <div className="relative z-10">
-          <span className="font-display text-[16px] font-semibold text-gold-primary">
-            {'\u265E'} ChessIQ Analytics
-          </span>
-        </div>
+        {/* Content container — vertically centered */}
+        <div className="relative z-10 flex flex-1 flex-col justify-center">
+          {/* Logo */}
+          <div className="mb-12">
+            <span className="font-display text-[16px] font-semibold text-gold-primary">
+              {'\u265E'} ChessIQ Analytics
+            </span>
+          </div>
 
-        {/* Headline + Subtext */}
-        <div className="relative z-10 max-w-md">
+          {/* Headline */}
           <h1 className="font-display text-[36px] font-bold leading-tight text-text-primary">
             Every move tells a story.
           </h1>
-          <p className="mt-3 text-[16px] text-text-secondary">
+
+          {/* Subtext */}
+          <p className="mt-4 max-w-md text-[16px] leading-relaxed text-text-secondary">
             Uncover the hidden patterns in your chess games with data-driven
             insights and analytics.
           </p>
 
-          {/* Features list */}
-          <ul className="mt-8 space-y-3 text-[15px] text-text-secondary">
-            {features.map((item, i) => (
-              <li key={i} className="flex items-center gap-2">
-                <span className="text-gold-primary">{item}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Bottom branding */}
-        <div className="relative z-10 text-[12px] text-text-tertiary">
-          Grandmaster&apos;s War Room v3.0
+          {/* Features — inline per spec: ♟ Player performance · ♟ Opening analysis · ♟ Real-time analytics */}
+          <p className="mt-8 max-w-md text-[15px] leading-relaxed text-text-secondary">
+            <span className="text-gold-primary">{'\u265F'}</span> Player performance{' '}
+            <span className="text-text-tertiary">&middot;</span>{' '}
+            <span className="text-gold-primary">{'\u265F'}</span> Opening analysis{' '}
+            <span className="text-text-tertiary">&middot;</span>{' '}
+            <span className="text-gold-primary">{'\u265F'}</span> Real-time analytics
+          </p>
         </div>
       </div>
 
