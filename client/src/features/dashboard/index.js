@@ -1,2 +1,9 @@
 export { default as HeroStats } from './HeroStats';
 export { default as Sparkline } from './Sparkline';
+export { default as VictoryChart } from './VictoryChart';
+export { default as ColorAdvantage } from './ColorAdvantage';
+export { default as TopOpenings } from './TopOpenings';
+export { default as TimeControlChart } from './TimeControlChart';
+export { default as ActivityLog } from './ActivityLog';
+export { default as TickerBar } from './TickerBar';
+export { default as LatestMatches } from './LatestMatches';

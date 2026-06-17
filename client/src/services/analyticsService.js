@@ -5,37 +5,59 @@
 
 import api from './api';
 
-const unwrap = (res) => res.data.data || res.data;
+const unwrapData = (res) => res.data.data;
 
-export const getVictoryDistribution = () =>
-  api.get('/analytics/victory-distribution').then(unwrap);
+export const getVictoryDistribution = async () => {
+  const res = await api.get('/analytics/victory-distribution');
+  return unwrapData(res);
+};
 
-export const getColorAdvantage = () =>
-  api.get('/analytics/color-advantage').then(unwrap);
+export const getColorAdvantage = async () => {
+  const res = await api.get('/analytics/color-advantage');
+  return unwrapData(res);
+};
 
-export const getTurnCountAvg = () =>
-  api.get('/analytics/turn-count-avg').then(unwrap);
+export const getTurnCountAvg = async () => {
+  const res = await api.get('/analytics/turn-count-average');
+  return unwrapData(res);
+};
 
-export const getTimeControlUsage = () =>
-  api.get('/analytics/time-control-usage').then(unwrap);
+export const getTimeControlUsage = async () => {
+  const res = await api.get('/analytics/time-control-usage');
+  return unwrapData(res);
+};
 
-export const getShortestGames = () =>
-  api.get('/analytics/shortest-games').then(unwrap);
+export const getShortestGames = async () => {
+  const res = await api.get('/analytics/shortest-games');
+  return unwrapData(res);
+};
 
-export const getLongestGames = () =>
-  api.get('/analytics/longest-games').then(unwrap);
+export const getLongestGames = async () => {
+  const res = await api.get('/analytics/longest-games');
+  return unwrapData(res);
+};
 
-export const getRatingGapUpsets = () =>
-  api.get('/analytics/rating-gap-upsets').then(unwrap);
+export const getRatingGapUpsets = async () => {
+  const res = await api.get('/analytics/rating-gap-upsets');
+  return unwrapData(res);
+};
 
-export const getCheckmateFreq = () =>
-  api.get('/analytics/checkmate-frequency').then(unwrap);
+export const getCheckmateFreq = async () => {
+  const res = await api.get('/analytics/checkmate-frequency');
+  return unwrapData(res);
+};
 
-export const getOpeningSuccess = () =>
-  api.get('/analytics/opening-success').then(unwrap);
+export const getOpeningSuccess = async () => {
+  const res = await api.get('/analytics/opening-success');
+  return unwrapData(res);
+};
 
-export const getPlayerGrowth = () =>
-  api.get('/analytics/player-growth').then(unwrap);
+export const getPlayerGrowth = async () => {
+  const res = await api.get('/analytics/player-growth');
+  return unwrapData(res);
+};
 
-export const getHourlyActivity = () =>
-  api.get('/analytics/hourly-activity').then(unwrap);
+export const getHourlyActivity = async () => {
+  const res = await api.get('/analytics/hourly-activity');
+  return unwrapData(res);
+};

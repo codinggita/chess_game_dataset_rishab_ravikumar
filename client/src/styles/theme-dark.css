@@ -15,6 +15,7 @@
   /* ── Semantic backgrounds (not in PRD, needed for functionality) ── */
   --color-bg-input: #0d0d12;
   --color-bg-row-hover: #181820;
+  --color-bg-deep: #08080a;
 
   /* ── Borders ── */
   --color-border-subtle: #252530;

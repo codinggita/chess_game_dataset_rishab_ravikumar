@@ -76,6 +76,11 @@ export default function Topbar({
             <input
               type="text"
               placeholder="Search..."
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && e.target.value.trim()) {
+                  handleNavigate(`/matches?search=${encodeURIComponent(e.target.value.trim())}`);
+                }
+              }}
               className="h-[34px] w-[240px] rounded-[4px] border border-border-subtle bg-bg-input pl-8 pr-3 text-[13px] text-text-primary placeholder:text-text-tertiary outline-none transition-colors focus:border-gold-primary"
             />
           </div>
@@ -111,7 +116,7 @@ export default function Topbar({
             </button>
 
             {dropdownOpen && (
-              <div className="absolute right-0 top-full mt-2 w-[180px] rounded-[6px] border border-border-strong bg-bg-elevated py-1 shadow-[0_4px_20px_rgba(0,0,0,0.4)] z-50">
+              <div className="absolute right-0 top-full mt-2 w-[180px] rounded-[6px] border border-border-strong bg-bg-elevated py-1 z-50">
                 <div className="border-b border-border-subtle px-4 py-2.5">
                   <p className="text-[13px] font-medium text-text-primary truncate">{userName}</p>
                   <span className="text-[11px] text-text-tertiary">
@@ -122,20 +127,20 @@ export default function Topbar({
                   onClick={() => handleNavigate('/profile')}
                   className="flex w-full items-center gap-3 px-4 py-2 text-[13px] text-text-secondary hover:bg-bg-hover hover:text-text-primary transition-colors"
                 >
-                  👤 Profile
+                  Profile
                 </button>
                 <button
                   onClick={() => handleNavigate('/settings')}
                   className="flex w-full items-center gap-3 px-4 py-2 text-[13px] text-text-secondary hover:bg-bg-hover hover:text-text-primary transition-colors"
                 >
-                  ⚙ Settings
+                  Settings
                 </button>
                 <div className="border-t border-border-subtle mt-1 pt-1">
                   <button
                     onClick={() => handleNavigate('/logout')}
                     className="flex w-full items-center gap-3 px-4 py-2 text-[13px] text-data-negative hover:bg-bg-hover transition-colors"
                   >
-                    🚪 Logout
+                    Logout
                   </button>
                 </div>
               </div>
@@ -160,6 +165,11 @@ export default function Topbar({
             type="text"
             placeholder="Search matches, players, openings..."
             autoFocus={mobileSearchOpen}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && e.target.value.trim()) {
+                handleNavigate(`/matches?search=${encodeURIComponent(e.target.value.trim())}`);
+              }
+            }}
             className="w-full h-[38px] rounded-[4px] border border-border-subtle bg-bg-input pl-8 pr-3 text-[13px] text-text-primary placeholder:text-text-tertiary outline-none transition-colors focus:border-gold-primary"
           />
         </div>

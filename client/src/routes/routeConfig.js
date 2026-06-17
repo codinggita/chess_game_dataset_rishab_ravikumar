@@ -1,5 +1,5 @@
 /* ── ChessIQ Route Configuration ──
-   All 14 routes per CHESSIQ-FRONTEND-PRD.md (§6)
+   All 14 routes
    Used by AppRouter.jsx for route generation
 */
 

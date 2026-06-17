@@ -17,6 +17,9 @@
 @utility animate-shrink-width {
   animation: shrink-width linear forwards;
 }
+@utility animate-ticker {
+  animation: ticker-scroll 20s linear infinite;
+}
 
 /* ── Tailwind 4 Theme Configuration ──
    Maps design tokens to Tailwind utility classes.
@@ -30,6 +33,7 @@
   --color-bg-hover: var(--color-bg-hover);
   --color-bg-row-hover: var(--color-bg-row-hover);
   --color-bg-input: var(--color-bg-input);
+  --color-bg-deep: var(--color-bg-deep);
   --color-border-subtle: var(--color-border-subtle);
   --color-border-strong: var(--color-border-strong);
   --color-text-primary: var(--color-text-primary);

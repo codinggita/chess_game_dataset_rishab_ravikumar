@@ -18,8 +18,6 @@ const sizeStyles = {
   lg: 'h-11 text-[14px] px-8',
 };
 
-const iconSize = { sm: 28, md: 32, lg: 40 };
-
 const Button = forwardRef(
   ({ variant = 'primary', size = 'md', disabled, loading, children, className, ...props }, ref) => {
     const isDisabled = disabled || loading;
@@ -33,7 +31,12 @@ const Button = forwardRef(
           'focus-visible:outline-2 focus-visible:outline-gold-primary focus-visible:outline-offset-2',
           variantStyles[variant],
           sizeStyles[size],
-          variant === 'icon' && `w-[${iconSize[size]}px]`,
+          variant === 'icon' &&
+            {
+              sm: 'w-7 px-0',
+              md: 'w-8 px-0',
+              lg: 'w-10 px-0',
+            }[size],
           isDisabled && 'pointer-events-none opacity-40',
           className,
         )}

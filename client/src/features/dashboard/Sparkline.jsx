@@ -9,20 +9,18 @@ export default function Sparkline({ data = [] }) {
   if (!data.length) return null;
 
   return (
-    <div className="h-12 w-[120px]">
-      <ResponsiveContainer width="100%" height="100%">
-        <LineChart data={data}>
-          <Line
-            type="monotone"
-            dataKey="value"
-            stroke="#C9A84C"
-            strokeWidth={1.5}
-            dot={false}
-            activeDot={false}
-            isAnimationActive={false}
-          />
-        </LineChart>
-      </ResponsiveContainer>
+    <div className="relative h-12 w-[120px]">
+      <LineChart width={120} height={48} data={data}>
+        <Line
+          type="monotone"
+          dataKey="value"
+          stroke="#C9A84C"
+          strokeWidth={1.5}
+          dot={false}
+          activeDot={false}
+          isAnimationActive={false}
+        />
+      </LineChart>
     </div>
   );
 }
