@@ -15,7 +15,6 @@ import Sparkline from './Sparkline';
    Fires once when element scrolls into view.
    Guards against NaN with safeValue.
 */
-
 function AnimatedNumber({ value, duration = 1.5, className }) {
   const [display, setDisplay] = useState(0);
   const ref = useRef(null);
@@ -24,7 +23,6 @@ function AnimatedNumber({ value, duration = 1.5, className }) {
 
   useEffect(() => {
     if (!isInView) return;
-    setDisplay(0);
     const controls = animate(0, safeValue, {
       duration,
       ease: 'easeOut',
@@ -78,7 +76,6 @@ export default function HeroStats() {
     useSelector((s) => s.data.stats);
 
   const [dailyData, setDailyData] = useState([]);
-  const [sparkLoaded, setSparkLoaded] = useState(false);
 
   /* Fetch stats via Redux thunk on mount */
   useEffect(() => {
@@ -98,10 +95,7 @@ export default function HeroStats() {
         }));
         setDailyData(sparkData);
       })
-      .catch(() => {})
-      .finally(() => {
-        if (!cancelled) setSparkLoaded(true);
-      });
+      .catch(() => {});
 
     return () => {
       cancelled = true;
@@ -188,7 +182,7 @@ export default function HeroStats() {
         label="Total Players"
         value={safePlayers}
         borderColor="border-l-gold-primary"
-        trend={trend}
+        trend={null}
         duration={1}
       />
 
@@ -198,7 +192,7 @@ export default function HeroStats() {
         value={safeWhiteWin}
         suffix="%"
         borderColor="border-l-data-positive"
-        trend={trend != null ? -trend : null}
+        trend={null}
         duration={1}
       />
 
@@ -208,7 +202,7 @@ export default function HeroStats() {
         value={safeCheckmate}
         suffix="%"
         borderColor="border-l-purple-primary"
-        trend={trend != null ? Math.round(trend * 0.6) : null}
+        trend={null}
         duration={1}
       />
     </div>
@@ -226,17 +220,18 @@ function StatCard({ label, value, suffix = '', borderColor, trend, duration = 1 
         {label}
       </p>
 
-      <AnimatedNumber
-        value={value}
-        duration={duration}
-        className="mt-2 block font-display text-[36px] font-bold leading-none text-text-primary"
-      />
-
-      {suffix && (
-        <span className="font-display text-[36px] font-bold leading-none text-text-primary">
-          {suffix}
-        </span>
-      )}
+      <div className="mt-2 flex items-baseline">
+        <AnimatedNumber
+          value={value}
+          duration={duration}
+          className="font-display text-[36px] font-bold leading-none text-text-primary"
+        />
+        {suffix && (
+          <span className="font-display text-[36px] font-bold leading-none text-text-primary">
+            {suffix}
+          </span>
+        )}
+      </div>
 
       {trend != null && (
         <TrendBadge value={trend} className="mt-2 block" />

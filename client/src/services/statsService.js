@@ -10,7 +10,10 @@ import api from './api';
 
 /* ── Helpers ── */
 
-const unwrapData = (res) => res.data.data;
+/* Backend wraps: { success, data: { data: { ...payload } } }
+   Axios response.data = full JSON body
+   So: res.data.data.data = the actual payload (e.g. { total: 20058 }) */
+const unwrapData = (res) => res.data.data.data;
 
 export const getTotalMatches = async () => {
   const res = await api.get('/stats/total-matches');

@@ -1,28 +1,42 @@
 import { useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import clsx from 'clsx';
 import Sidebar from './Sidebar';
 import Topbar from './Topbar';
-
-/* ── MainLayout per CHESSIQ-FRONTEND-PRD.md (§9 / PR 12) ──
-   Sidebar (fixed) + Topbar (sticky) + content via <Outlet />
-   Content: 24px padding, 12-column grid
-   Responsive: <1024px sidebar becomes overlay with hamburger
-*/
+import { useAuth } from '../../hooks/useAuth';
+import { logoutUser } from '../../store/slices/authSlice';
 
 export default function MainLayout({
-  userRole = 'user',
-  userName = 'Player',
-  breadcrumbs = [],
-  activePath = '/dashboard',
-  onNavigate,
   children,
   className,
 }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { user } = useAuth();
+
+  const activePath = location.pathname;
+  const userName = user?.name || 'Player';
+  const userRole = user?.role || 'user';
+
+  // Derive breadcrumbs dynamically
+  const pathParts = activePath.split('/').filter(Boolean);
+  const breadcrumbs = pathParts.map((part, i) => {
+    const to = '/' + pathParts.slice(0, i + 1).join('/');
+    return {
+      label: part.charAt(0).toUpperCase() + part.slice(1),
+      path: to,
+    };
+  });
 
   const handleNavigate = (path) => {
-    onNavigate?.(path);
+    if (path === '/logout') {
+      dispatch(logoutUser());
+      return;
+    }
+    navigate(path);
     setSidebarOpen(false);
   };
 
