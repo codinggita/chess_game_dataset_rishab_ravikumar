@@ -110,7 +110,8 @@ const matchController = {
     const { skip, meta } = paginate(req.query, page, limit);
     const sortObj = buildSort(sort);
     const matches = await matchService.getAllMatches(filters, sortObj, skip, meta.limit);
-    return apiResponse.success(res, 'Matches fetched successfully', { matches }, meta);
+    const total = await matchService.countMatches(filters);
+    return apiResponse.success(res, 'Matches fetched successfully', { matches }, { ...meta, total });
   }),
 
   // @desc    Get shortest matches (by turns ascending)

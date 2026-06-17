@@ -18,6 +18,17 @@ const matchService = {
     return await Match.find(query).sort(sort).skip(skip).limit(limit);
   },
 
+  countMatches: async (filters = {}) => {
+    const allowedFields = ['isDeleted', 'rated', 'winner', 'victory_status', 'increment_code', 'white_id', 'black_id', 'opening_name', 'opening_eco', 'turns', 'white_rating', 'black_rating'];
+    const { page, ...dbFilters } = filters;
+    const cleanFilters = {};
+    for (const key of allowedFields) {
+      if (dbFilters[key] !== undefined) cleanFilters[key] = dbFilters[key];
+    }
+    const query = { ...cleanFilters, isDeleted: false };
+    return await Match.countDocuments(query);
+  },
+
   /**
    * Get match by Lichess ID
    */
