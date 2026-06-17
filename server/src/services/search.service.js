@@ -5,7 +5,7 @@ const Opening = require('../models/Opening');
 const searchService = {
   searchMatches: async (q, filters = {}) => {
     if (!q) return [];
-    const { page, ...dbFilters } = filters;
+    const { page, q: _q, ...dbFilters } = filters;
     const query = {
       isDeleted: false,
       $or: [

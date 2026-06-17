@@ -176,7 +176,7 @@ const initialState = {
 
 const normalizeList = (payload) => {
   if (Array.isArray(payload)) return { items: payload, totalCount: payload.length };
-  if (payload?.matches) return { items: payload.matches, totalCount: payload.totalCount || payload.matches.length };
+  if (payload?.matches) return { items: payload.matches, totalCount: payload.meta?.total || payload.totalCount || payload.matches.length };
   if (payload?.players) return { items: payload.players, totalCount: payload.totalCount || payload.players.length };
   if (payload?.openings) return { items: payload.openings, totalCount: payload.totalCount || payload.openings.length };
   if (payload?.items) return { items: payload.items, totalCount: payload.totalCount || payload.items.length };

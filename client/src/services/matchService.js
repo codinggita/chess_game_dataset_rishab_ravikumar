@@ -5,7 +5,12 @@
 
 import api from './api';
 
-const unwrap = (res) => res.data.data;
+const unwrap = (res) => {
+  if (res.data && res.data.meta) {
+    return { ...res.data.data, meta: res.data.meta };
+  }
+  return res.data.data;
+};
 
 /* ── CRUD ── */
 export const getAll = (params) =>
