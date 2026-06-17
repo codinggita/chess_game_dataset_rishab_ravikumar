@@ -33,23 +33,23 @@ export const remove = (id) =>
 
 /* ── Archive / Restore ── */
 export const archive = (id) =>
-  api.put(`/matches/${id}/archive`).then(unwrap);
+  api.patch(`/matches/${id}/archive`).then(unwrap);
 
 export const restore = (id) =>
-  api.put(`/matches/${id}/restore`).then(unwrap);
+  api.patch(`/matches/${id}/restore`).then(unwrap);
 
 /* ── Bulk ── */
 export const bulkUpload = (matches) =>
-  api.post('/matches/bulk', { matches }).then(unwrap);
+  api.post('/matches/bulk-upload', { matches }).then(unwrap);
 
 export const bulkUpdate = (ids, data) =>
-  api.put('/matches/bulk', { ids, data }).then(unwrap);
+  api.patch('/matches/bulk-update', { ids, data }).then(unwrap);
 
 export const bulkDelete = (ids) =>
-  api.delete('/matches/bulk', { data: { ids } }).then(unwrap);
+  api.post('/matches/bulk-delete', { ids }).then(unwrap);
 
 export const bulkArchive = (ids) =>
-  api.put('/matches/bulk/archive', { ids }).then(unwrap);
+  api.patch('/matches/bulk/archive', { ids }).then(unwrap);
 
 /* ── Lists ── */
 export const getLatest = () =>
