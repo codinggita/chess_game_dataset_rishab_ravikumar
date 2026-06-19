@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { usePageMeta } from '../hooks/usePageMeta';
 import { fetchMatches, setMatchPage, archiveMatch } from '../store/slices/dataSlice';
 import * as searchService from '../services/searchService';
@@ -12,11 +13,13 @@ import NewMatchModal from '../features/matches/NewMatchModal';
 import DeleteMatchModal from '../features/matches/DeleteMatchModal';
 
 /* ─── Winner border utilities ─── */
-function getBorderColorHex(winner) {
-  if (winner === 'white') return '#C9A84C';
-  if (winner === 'black') return '#35354A';
-  return '#6B7AFF';
-}
+const getRowStyle = (winner) => ({
+  borderLeft: winner === 'white'
+    ? '2px solid #C9A84C'
+    : winner === 'black'
+    ? '2px solid #35354A'
+    : '2px solid #6B7AFF'
+});
 
 function truncateId(id) {
   if (!id) return '';
@@ -60,6 +63,7 @@ function Avatar({ name }) {
 export default function AllMatches() {
   usePageMeta('Matches');
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { items, totalCount, page, pageSize, isLoading } = useSelector((state) => state.data.matches);
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -318,8 +322,9 @@ export default function AllMatches() {
                       className={`group border-b border-border-subtle/50 hover:bg-[#181820] hover:shadow-[inset_3px_0_0_rgba(201,168,76,0.5)] transition-all ${
                         isSelected ? 'bg-gold-primary/5' : ''
                       }`}
+                      style={getRowStyle(m.winner)}
                     >
-                      <td className="py-3 px-3 text-center border-l-4" style={{ borderLeftColor: getBorderColorHex(m.winner) }}>
+                      <td className="py-3 px-3 text-center">
                         <input
                           type="checkbox"
                           checked={isSelected}
@@ -376,24 +381,37 @@ export default function AllMatches() {
                       <td className="py-3 px-4 font-mono text-right text-text-secondary">
                         {m.turns ?? '-'}
                       </td>
-                      <td className="py-3 px-4 text-center">
-                        <div className="flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <button className="flex h-7 w-7 items-center justify-center rounded-[4px] bg-bg-elevated text-[14px] text-text-secondary hover:bg-gold-primary hover:text-[#0B0B0E] transition-colors" title="View">
-                            👁
-                          </button>
+                      <td className="py-3 px-4">
+                        <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-150 flex gap-2 justify-center">
+                          {/* View button */}
                           <button
-                            onClick={() => handleArchive(id)}
-                            className="flex h-7 w-7 items-center justify-center rounded-[4px] bg-bg-elevated text-[14px] text-text-secondary hover:text-data-warning transition-colors"
-                            title="Archive"
+                            aria-label="View match"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              navigate(`/matches/${id}`);
+                            }}
+                            className="p-1.5 rounded-md border border-border-subtle text-text-tertiary hover:text-gold-primary hover:border-gold-primary transition-colors"
                           >
-                            📁
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                              <circle cx="12" cy="12" r="3"/>
+                            </svg>
                           </button>
+
+                          {/* Archive button */}
                           <button
-                            onClick={() => setDeleteTarget(id)}
-                            className="flex h-7 w-7 items-center justify-center rounded-[4px] bg-bg-elevated text-[14px] text-text-secondary hover:text-data-negative transition-colors"
-                            title="Delete"
+                            aria-label="Archive match"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleArchive(id);
+                            }}
+                            className="p-1.5 rounded-md border border-border-subtle text-text-tertiary hover:text-data-warning hover:border-data-warning transition-colors"
                           >
-                            🗑
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <polyline points="21 8 21 21 3 21 3 8"/>
+                              <rect x="1" y="3" width="22" height="5"/>
+                              <line x1="10" y1="12" x2="14" y2="12"/>
+                            </svg>
                           </button>
                         </div>
                       </td>

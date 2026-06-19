@@ -23,8 +23,8 @@ export default function TickerBar() {
         if (cancelled) return;
 
         const tickerItems = [
-          matches !== null ? `Total Matches: ${Number(matches).toLocaleString()}` : null,
-          players !== null ? `Total Players: ${Number(players).toLocaleString()}` : null,
+          matches !== null ? { label: 'Total Matches', value: Number(matches).toLocaleString() } : null,
+          players !== null ? { label: 'Total Players', value: Number(players).toLocaleString() } : null,
         ].filter(Boolean);
 
         setItems(tickerItems);
@@ -41,21 +41,33 @@ export default function TickerBar() {
 
   /* ── Skeleton ── */
   if (loading) {
-    return <div className="h-9 animate-pulse bg-bg-elevated" />;
+    return <div className="h-9 animate-pulse bg-bg-elevated border-t border-b border-[#1E1E28]" />;
   }
 
   /* ── No data available ── */
   if (items.length === 0) return null;
 
-  /* Duplicate for seamless infinite loop */
-  const displayText = [...items, ...items].join('  \u2022  ');
+  const renderItems = () => (
+    <>
+      {items.map((item, idx) => (
+        <span key={idx} className="inline-block font-mono text-[13px] px-6">
+          <span className="text-text-secondary">{item.label}: </span>
+          <span className="text-gold-primary font-semibold">{item.value}</span>
+        </span>
+      ))}
+      <span className="text-text-secondary px-6">•</span>
+    </>
+  );
 
   return (
-    <div className="relative h-9 overflow-hidden bg-bg-deep">
-      <div className="animate-ticker whitespace-nowrap py-[7px]">
-        <span className="inline-block font-mono text-[13px] text-text-secondary px-4">
-          {displayText}
-        </span>
+    <div className="relative h-9 overflow-hidden bg-bg-deep border-t border-b border-[#1E1E28]">
+      <div className="animate-ticker whitespace-nowrap py-[7px] inline-block">
+        <div className="inline-block">
+          {renderItems()}
+        </div>
+        <div className="inline-block">
+          {renderItems()}
+        </div>
       </div>
     </div>
   );
