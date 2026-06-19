@@ -68,6 +68,17 @@ export const archiveMatch = createAsyncThunk(
   },
 );
 
+export const restoreMatch = createAsyncThunk(
+  'data/restoreMatch',
+  async (id, { rejectWithValue }) => {
+    try {
+      return await matchService.restore(id);
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message || 'Failed to restore match');
+    }
+  },
+);
+
 /* ─── Thunks: Players ─── */
 
 export const fetchPlayers = createAsyncThunk(
@@ -273,6 +284,20 @@ const dataSlice = createSlice({
         }
       })
       .addCase(archiveMatch.rejected, (state, action) => {
+        state.error = action.payload;
+      });
+
+    /* ── restoreMatch ── */
+    builder
+      .addCase(restoreMatch.fulfilled, (state, action) => {
+        const idx = state.matches.items.findIndex(
+          (m) => m.id === action.payload.id || m._id === action.payload._id,
+        );
+        if (idx !== -1) {
+          state.matches.items[idx] = { ...state.matches.items[idx], isArchived: false };
+        }
+      })
+      .addCase(restoreMatch.rejected, (state, action) => {
         state.error = action.payload;
       });
 
