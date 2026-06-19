@@ -15,7 +15,7 @@ import Sparkline from './Sparkline';
    Fires once when element scrolls into view.
    Guards against NaN with safeValue.
 */
-function AnimatedNumber({ value, duration = 1.5, className }) {
+function AnimatedNumber({ value, duration = 1.5, decimals = 0, className }) {
   const [display, setDisplay] = useState(0);
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
@@ -26,47 +26,23 @@ function AnimatedNumber({ value, duration = 1.5, className }) {
     const controls = animate(0, safeValue, {
       duration,
       ease: 'easeOut',
-      onUpdate: (v) => setDisplay(Math.round(v)),
+      onUpdate: (v) => setDisplay(v),
     });
     return controls.stop;
   }, [isInView, safeValue, duration]);
 
+  const formatted = decimals > 0
+    ? display.toFixed(decimals)
+    : Math.round(display).toLocaleString();
+
   return (
     <span ref={ref} className={className}>
-      {display.toLocaleString()}
+      {formatted}
     </span>
   );
 }
 
-/* ─── Trend badge ─── */
 
-function TrendBadge({ value, className = '' }) {
-  if (value == null) return null;
-
-  const arrow = value > 0 ? '\u2191' : value < 0 ? '\u2193' : '\u2192';
-  const color =
-    value > 0
-      ? 'text-data-positive'
-      : value < 0
-        ? 'text-data-negative'
-        : 'text-data-neutral';
-
-  return (
-    <span className={`font-mono text-[12px] ${color} ${className}`}>
-      {arrow} {Math.abs(value)}%
-    </span>
-  );
-}
-
-/* ─── Compute week-over-week trend from daily data ─── */
-
-function computeTrend(dailyGames) {
-  if (!dailyGames || dailyGames.length < 14) return null;
-  const recent = dailyGames.slice(-7).reduce((s, d) => s + (d.count || d.value || 0), 0);
-  const previous = dailyGames.slice(-14, -7).reduce((s, d) => s + (d.count || d.value || 0), 0);
-  if (previous === 0) return null;
-  return Math.round(((recent - previous) / previous) * 100);
-}
 
 /* ─── Main Component ─── */
 
@@ -127,8 +103,6 @@ export default function HeroStats() {
     );
   }
 
-  const trend = computeTrend(dailyData);
-
   /* Guard every value against NaN/undefined */
   const safeTotal = Number(totalMatches) || 0;
   const safePlayers = Number(totalPlayers) || 0;
@@ -160,6 +134,7 @@ export default function HeroStats() {
         <AnimatedNumber
           value={safeTotal}
           duration={1.5}
+          decimals={0}
           className="relative z-10 mt-2 block font-display text-[64px] font-bold leading-none text-gold-primary"
         />
 
@@ -168,13 +143,10 @@ export default function HeroStats() {
           <Sparkline data={dailyData} />
         </div>
 
-        {/* Trend badge */}
-        {trend != null && (
-          <TrendBadge
-            value={trend}
-            className="relative z-10 mt-2 block"
-          />
-        )}
+        {/* Trend badge - Option B */}
+        <span className="relative z-10 mt-2 block font-mono text-[11px] text-text-tertiary">
+          → Stable
+        </span>
       </div>
 
       {/* ── Regular Card: Total Players ── */}
@@ -182,8 +154,9 @@ export default function HeroStats() {
         label="Total Players"
         value={safePlayers}
         borderColor="border-l-gold-primary"
-        trend={null}
+        subtext={`${safePlayers.toLocaleString()} tracked`}
         duration={1}
+        decimals={0}
       />
 
       {/* ── Regular Card: White Win Rate ── */}
@@ -192,8 +165,9 @@ export default function HeroStats() {
         value={safeWhiteWin}
         suffix="%"
         borderColor="border-l-data-positive"
-        trend={null}
+        subtext="→ Near equal"
         duration={1}
+        decimals={1}
       />
 
       {/* ── Regular Card: Checkmate Rate ── */}
@@ -202,8 +176,9 @@ export default function HeroStats() {
         value={safeCheckmate}
         suffix="%"
         borderColor="border-l-purple-primary"
-        trend={null}
+        subtext={`${safeCheckmate.toFixed(1)}% of games`}
         duration={1}
+        decimals={1}
       />
     </div>
   );
@@ -211,7 +186,7 @@ export default function HeroStats() {
 
 /* ─── StatCard (regular variant) ─── */
 
-function StatCard({ label, value, suffix = '', borderColor, trend, duration = 1 }) {
+function StatCard({ label, value, suffix = '', borderColor, subtext, duration = 1, decimals = 0 }) {
   return (
     <div
       className={`col-span-2 rounded-[6px] border border-border-subtle bg-bg-surface p-5 ${borderColor} border-l-2`}
@@ -224,6 +199,7 @@ function StatCard({ label, value, suffix = '', borderColor, trend, duration = 1 
         <AnimatedNumber
           value={value}
           duration={duration}
+          decimals={decimals}
           className="font-display text-[36px] font-bold leading-none text-text-primary"
         />
         {suffix && (
@@ -233,8 +209,10 @@ function StatCard({ label, value, suffix = '', borderColor, trend, duration = 1 
         )}
       </div>
 
-      {trend != null && (
-        <TrendBadge value={trend} className="mt-2 block" />
+      {subtext && (
+        <span className="mt-2 block font-mono text-[11px] text-text-tertiary">
+          {subtext}
+        </span>
       )}
     </div>
   );

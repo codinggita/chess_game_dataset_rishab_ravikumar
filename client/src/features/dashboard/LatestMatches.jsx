@@ -11,11 +11,13 @@ import { getAll } from '../../services/matchService';
 
 /* ─── Winner border utilities ─── */
 
-function getBorderColorHex(winner) {
-  if (winner === 'white') return '#C9A84C';
-  if (winner === 'black') return '#35354A';
-  return '#6B7AFF';
-}
+const getRowStyle = (winner) => ({
+  borderLeft: winner === 'white'
+    ? '2px solid #C9A84C'
+    : winner === 'black'
+    ? '2px solid #35354A'
+    : '2px solid #6B7AFF'
+});
 
 function truncateId(id) {
   if (!id) return '';
@@ -118,8 +120,8 @@ export default function LatestMatches() {
             {matches.map((m, i) => (
               <tr
                 key={m.id || m._id || i}
-                className="border-l-2 border-b border-border-subtle/50 hover:bg-[#181820] hover:shadow-[inset_3px_0_0_rgba(201,168,76,0.5)] transition-all"
-                style={{ borderLeftColor: getBorderColorHex(m.winner) }}
+                className="border-b border-border-subtle/50 hover:bg-[#181820] hover:shadow-[inset_3px_0_0_rgba(201,168,76,0.5)] transition-all"
+                style={getRowStyle(m.winner)}
               >
                 {/* ID — monospace, truncated */}
                 <td className="py-2 pr-2 font-mono text-text-tertiary">

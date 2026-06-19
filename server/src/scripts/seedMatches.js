@@ -12,17 +12,33 @@ const JSON_PATH = path.resolve(__dirname, '../../', 'Chess Game Dataset.json');
 const BATCH_SIZE = 5000;
 
 // ── Main ────────────────────────────────────────────────────────
-async function seedAll() {
-  console.log('Connecting to MongoDB...');
-  await mongoose.connect(process.env.MONGODB_URI);
-  console.log('Connected to MongoDB');
+async function seedAll(shouldExit = true) {
+  if (shouldExit) {
+    console.log('Connecting to MongoDB...');
+    await mongoose.connect(process.env.MONGODB_URI);
+    console.log('Connected to MongoDB');
+  }
+
+  const matchCount = await Match.countDocuments();
+  const playerCount = await Player.countDocuments();
+  const openingCount = await Opening.countDocuments();
+  const userCount = await User.countDocuments();
+
+  const shouldSeedMatches = matchCount === 0;
+  const shouldSeedPlayers = playerCount === 0;
+  const shouldSeedOpenings = openingCount === 0;
+  const shouldSeedUsers = userCount === 0;
+
+  if (!shouldSeedMatches && !shouldSeedPlayers && !shouldSeedOpenings && !shouldSeedUsers) {
+    console.log('All collections already seeded. Skipping.');
+    return;
+  }
 
   // 1. Clean existing data
-  console.log('Clearing existing collections...');
-  await Match.deleteMany({});
-  await Player.deleteMany({});
-  await Opening.deleteMany({});
-  await User.deleteMany({});
+  console.log('Clearing empty collections...');
+  if (shouldSeedMatches) await Match.deleteMany({});
+  if (shouldSeedPlayers) await Player.deleteMany({});
+  if (shouldSeedOpenings) await Opening.deleteMany({});
   console.log('Collections cleared');
 
   // 2. Sync indexes to ensure unique constraints are active
@@ -33,25 +49,29 @@ async function seedAll() {
   await User.syncIndexes();
   console.log('Indexes synced');
 
-  // 3. Create Default Users (hashes password via pre-save hook)
-  console.log('Seeding default users...');
-  await User.create([
-    {
-      name: 'Grandmaster Admin',
-      email: 'admin@chessiq.com',
-      password: 'password123',
-      role: 'admin',
-      emailVerified: true,
-    },
-    {
-      name: 'Chess Analyst',
-      email: 'user@chessiq.com',
-      password: 'password123',
-      role: 'user',
-      emailVerified: true,
-    },
-  ]);
-  console.log('Default users seeded');
+  // 3. Create Default Users if none exist (hashes password via pre-save hook)
+  if (shouldSeedUsers) {
+    console.log('Seeding default users...');
+    await User.create([
+      {
+        name: 'Grandmaster Admin',
+        email: 'admin@chessiq.com',
+        password: 'password123',
+        role: 'admin',
+        emailVerified: true,
+      },
+      {
+        name: 'Chess Analyst',
+        email: 'user@chessiq.com',
+        password: 'password123',
+        role: 'user',
+        emailVerified: true,
+      },
+    ]);
+    console.log('Default users seeded');
+  } else {
+    console.log('Users collection already populated, skipping default users seeding.');
+  }
 
   // 4. Read matches JSON
   console.log('Reading JSON dataset file...');
@@ -248,40 +268,58 @@ async function seedAll() {
   }
 
   // 8. Seeding Players in batches
-  console.log('Seeding Players...');
-  for (let i = 0; i < playersToInsert.length; i += BATCH_SIZE) {
-    const batch = playersToInsert.slice(i, i + BATCH_SIZE);
-    await Player.insertMany(batch, { ordered: false });
-    console.log(`  Inserted ${i + batch.length}/${playersToInsert.length} players`);
+  if (shouldSeedPlayers) {
+    console.log('Seeding Players...');
+    for (let i = 0; i < playersToInsert.length; i += BATCH_SIZE) {
+      const batch = playersToInsert.slice(i, i + BATCH_SIZE);
+      await Player.insertMany(batch, { ordered: false });
+      console.log(`  Inserted ${i + batch.length}/${playersToInsert.length} players`);
+    }
+  } else {
+    console.log('Players collection already populated, skipping players seeding.');
   }
 
   // 9. Seeding Openings in batches
-  console.log('Seeding Openings...');
-  for (let i = 0; i < openingsToInsert.length; i += BATCH_SIZE) {
-    const batch = openingsToInsert.slice(i, i + BATCH_SIZE);
-    await Opening.insertMany(batch, { ordered: false });
-    console.log(`  Inserted ${i + batch.length}/${openingsToInsert.length} openings`);
+  if (shouldSeedOpenings) {
+    console.log('Seeding Openings...');
+    for (let i = 0; i < openingsToInsert.length; i += BATCH_SIZE) {
+      const batch = openingsToInsert.slice(i, i + BATCH_SIZE);
+      await Opening.insertMany(batch, { ordered: false });
+      console.log(`  Inserted ${i + batch.length}/${openingsToInsert.length} openings`);
+    }
+  } else {
+    console.log('Openings collection already populated, skipping openings seeding.');
   }
 
   // 10. Seeding Matches in batches
-  console.log('Seeding Matches...');
-  for (let i = 0; i < matches.length; i += BATCH_SIZE) {
-    const batch = matches.slice(i, i + BATCH_SIZE);
-    await Match.insertMany(batch, { ordered: false });
-    console.log(`  Inserted ${i + batch.length}/${matches.length} matches`);
+  if (shouldSeedMatches) {
+    console.log('Seeding Matches...');
+    for (let i = 0; i < matches.length; i += BATCH_SIZE) {
+      const batch = matches.slice(i, i + BATCH_SIZE);
+      await Match.insertMany(batch, { ordered: false });
+      console.log(`  Inserted ${i + batch.length}/${matches.length} matches`);
+    }
+  } else {
+    console.log('Matches collection already populated, skipping matches seeding.');
   }
 
   console.log('\n=== Database Seeding Complete ===');
-  console.log(`  Matches seeded:  ${matches.length}`);
-  console.log(`  Players seeded:  ${playersToInsert.length}`);
-  console.log(`  Openings seeded: ${openingsToInsert.length}`);
-  console.log(`  Users seeded:    2`);
+  console.log(`  Matches seeded:  ${shouldSeedMatches ? matches.length : 0}`);
+  console.log(`  Players seeded:  ${shouldSeedPlayers ? playersToInsert.length : 0}`);
+  console.log(`  Openings seeded: ${shouldSeedOpenings ? openingsToInsert.length : 0}`);
+  console.log(`  Users seeded:    ${shouldSeedUsers ? 2 : 0}`);
 
-  await mongoose.disconnect();
-  process.exit(0);
+  if (shouldExit) {
+    await mongoose.disconnect();
+    process.exit(0);
+  }
 }
 
-seedAll().catch((err) => {
-  console.error('Fatal error during seeding:', err);
-  process.exit(1);
-});
+if (require.main === module) {
+  seedAll(true).catch((err) => {
+    console.error('Fatal error during seeding:', err);
+    process.exit(1);
+  });
+}
+
+module.exports = seedAll;

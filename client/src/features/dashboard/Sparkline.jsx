@@ -3,7 +3,7 @@
    Used inside the featured hero stat card.
 */
 
-import { LineChart, Line, ResponsiveContainer } from 'recharts';
+import { LineChart, Line } from 'recharts';
 
 export default function Sparkline({ data = [] }) {
   if (!data.length) return null;

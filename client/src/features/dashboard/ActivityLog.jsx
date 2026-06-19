@@ -2,22 +2,18 @@ import { useEffect, useState } from 'react';
 import api from '../../services/api';
 
 /* Backend: GET /system/logs → { data: { logs: [...], total }, meta } */
-const STATUS_DOT = {
-  '200': '#22C55E',
-  '304': '#C9A84C',
-  '404': '#F59E0B',
-  '500': '#EF4444',
+const getDotColor = (status) => {
+  if (!status) return '#55556A';
+  if (status >= 500) return '#F05252';
+  if (status >= 400) return '#F59E0B';
+  if (status >= 300) return '#6B7AFF';
+  return '#2DD4A0'; // 2xx = green
 };
 
 function stripAnsi(str) {
   /* Strip terminal escape codes like \u001b[0m, \u001b[32m, etc. */
   const esc = String.fromCharCode(27);
   return str.replace(new RegExp(esc + '\\[\\d*m', 'g'), '');
-}
-
-function dotColorFromMessage(msg) {
-  const match = msg?.match(/(\d{3})/);
-  return STATUS_DOT[match?.[1]] || '#6B7AFF';
 }
 
 export default function ActivityLog() {
@@ -32,11 +28,14 @@ export default function ActivityLog() {
         if (cancelled) return;
         /* res.data = { success, data: { logs: [...], total } } */
         const logs = res.data?.data?.logs || [];
-        const mapped = logs.slice(0, 10).map((log) => ({
-          dotColor: dotColorFromMessage(log.message),
-          action: `${stripAnsi(log.method)} ${log.url}`,
-          timestamp: log.timestamp,
-        }));
+        const mapped = logs.slice(0, 10).map((log) => {
+          const strippedUrl = log.url ? log.url.replace('/api/v1', '') : '';
+          return {
+            dotColor: getDotColor(log.status),
+            action: `${stripAnsi(log.method || '')} ${strippedUrl}`,
+            timestamp: log.timestamp,
+          };
+        });
         setEntries(mapped.length ? mapped : []);
       })
       .catch(() => setEntries([]))
@@ -76,7 +75,7 @@ export default function ActivityLog() {
               <p className="truncate text-[13px] text-text-primary">{entry.action}</p>
               {entry.timestamp && (
                 <p className="font-mono text-[11px] text-text-tertiary">
-                  {new Date(entry.timestamp).toLocaleString()}
+                  {new Date(entry.timestamp).toLocaleTimeString()}
                 </p>
               )}
             </div>
