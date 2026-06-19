@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { deleteMatch, fetchMatches } from '../../store/slices/dataSlice';
 import { showToast } from '../../components/ui/Toast';
 
-export default function DeleteMatchModal({ open, onClose, matchId }) {
+export default function DeleteMatchModal({ open, onClose, matchId, onSuccess }) {
   const dispatch = useDispatch();
   const [deleting, setDeleting] = useState(false);
 
@@ -13,7 +13,11 @@ export default function DeleteMatchModal({ open, onClose, matchId }) {
     setDeleting(true);
     try {
       await dispatch(deleteMatch(matchId)).unwrap();
-      dispatch(fetchMatches({ page: 1, limit: 10 }));
+      if (onSuccess) {
+        onSuccess();
+      } else {
+        dispatch(fetchMatches({ page: 1, limit: 10 }));
+      }
       showToast('Match deleted', 'success');
       onClose();
     } catch (err) {
