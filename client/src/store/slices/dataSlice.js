@@ -325,9 +325,8 @@ const dataSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchOpenings.fulfilled, (state, action) => {
-        const { items, totalCount } = normalizeList(action.payload);
-        state.openings.items = items;
-        state.openings.totalCount = totalCount;
+        state.openings.items = action.payload?.openings || [];
+        state.openings.totalCount = action.payload?.totalCount || (action.payload?.openings?.length || 0);
         state.openings.isLoading = false;
       })
       .addCase(fetchOpenings.rejected, (state, action) => {
