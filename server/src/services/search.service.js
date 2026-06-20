@@ -24,19 +24,19 @@ const searchService = {
 
   searchPlayers: async (q, filters = {}) => {
     if (!q) return [];
-    const { page, ...dbFilters } = filters;
+    const { page, q: _q, ...dbFilters } = filters;
     const query = {
       ...dbFilters,
       $or: [
         { username: { $regex: q, $options: 'i' } }
       ]
     };
-    return await Player.find(query).sort({ totalGames: -1 }).limit(20);
+    return await Player.find(query).sort({ username: 1 }).limit(20);
   },
 
   searchOpenings: async (q, filters = {}) => {
     if (!q) return [];
-    const { page, ...dbFilters } = filters;
+    const { page, q: _q, ...dbFilters } = filters;
     const query = {
       ...dbFilters,
       $or: [
@@ -50,14 +50,14 @@ const searchService = {
 
   searchEco: async (q, filters = {}) => {
     if (!q) return [];
-    const { page, ...dbFilters } = filters;
+    const { page, q: _q, ...dbFilters } = filters;
     const query = { eco: { $regex: q, $options: 'i' }, ...dbFilters };
     return await Opening.find(query).sort({ totalGames: -1 }).limit(20);
   },
 
   searchMoves: async (q, filters = {}) => {
     if (!q) return [];
-    const { page, ...dbFilters } = filters;
+    const { page, q: _q, ...dbFilters } = filters;
     const query = {
       isDeleted: false,
       moves: { $regex: q.replace(/,/g, ' '), $options: 'i' },

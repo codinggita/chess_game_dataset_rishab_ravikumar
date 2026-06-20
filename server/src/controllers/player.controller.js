@@ -5,7 +5,7 @@ const { paginate } = require('../utils/pagination');
 
 const playerController = {
   getAll: asyncHandler(async (req, res) => {
-    const { page, limit, sort, ...filters } = req.query;
+    const { page, limit, sort, skip: _skip, ...filters } = req.query;
     const { skip, meta } = paginate(req.query, page, limit);
     const players = await playerService.getAllPlayers(filters, skip, meta.limit);
     return apiResponse.success(res, 'Players fetched successfully', { players }, meta);

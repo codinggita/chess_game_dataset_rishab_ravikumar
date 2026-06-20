@@ -5,7 +5,7 @@ const playerService = {
   getAllPlayers: async (filters = {}, skip = 0, limit = 10) => {
     const { page, ...dbFilters } = filters;
     const query = { ...dbFilters };
-    return await Player.find(query).sort({ totalGames: -1 }).skip(skip).limit(limit);
+    return await Player.find(query).sort({ username: 1 }).skip(skip).limit(limit);
   },
 
   getPlayerByUsername: async (username) => {

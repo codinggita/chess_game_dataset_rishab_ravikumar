@@ -39,17 +39,17 @@ export const getRecent = (username) =>
 
 /* ── Leaderboards ── */
 export const getTopRated = () =>
-  api.get('/players/top/rated').then(unwrap);
+  api.get('/players/top-rated').then(unwrap);
 
 export const getTopActive = () =>
-  api.get('/players/top/active').then(unwrap);
+  api.get('/players/top-active').then(unwrap);
 
 export const getTopWinning = () =>
-  api.get('/players/top/winning').then(unwrap);
+  api.get('/players/top-winning').then(unwrap);
 
 /* ── Compare ── */
 export const compare = (player1, player2) =>
-  api.get('/players/compare', { params: { player1, player2 } }).then(unwrap);
+  api.get(`/players/compare/${player1}/${player2}`).then(unwrap);
 
 export const getByRatingRange = (min, max) =>
   api.get('/players/rating-range', { params: { min, max } }).then(unwrap);
