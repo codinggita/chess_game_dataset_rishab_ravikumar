@@ -25,17 +25,26 @@ export const search = (q) =>
 export const getByEco = (eco) =>
   api.get(`/openings/eco/${eco}`).then(unwrap);
 
-export const getByStyle = (style) =>
-  api.get(`/openings/style/${style}`).then(unwrap);
+export const getAggressive = () =>
+  api.get('/openings/aggressive').then(unwrap);
 
-export const getByComplexity = (level) =>
-  api.get(`/openings/complexity/${level}`).then(unwrap);
-
-export const getByAdvantage = (side) =>
-  api.get(`/openings/advantage/${side}`).then(unwrap);
+export const getDefensive = () =>
+  api.get('/openings/defensive').then(unwrap);
 
 export const getGambits = () =>
   api.get('/openings/gambits').then(unwrap);
+
+export const getWhiteAdvantage = () =>
+  api.get('/openings/white-advantage').then(unwrap);
+
+export const getBlackAdvantage = () =>
+  api.get('/openings/black-advantage').then(unwrap);
+
+export const getBeginnerFriendly = () =>
+  api.get('/openings/beginner-friendly').then(unwrap);
+
+export const getByComplexity = (level) =>
+  api.get('/openings/complexity', { params: { level } }).then(unwrap);
 
 export const getRare = () =>
   api.get('/openings/rare').then(unwrap);
