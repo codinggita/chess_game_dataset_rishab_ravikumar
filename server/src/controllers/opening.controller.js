@@ -7,8 +7,8 @@ const openingController = {
   getAll: asyncHandler(async (req, res) => {
     const { page, limit, ...filters } = req.query;
     const { skip, meta } = paginate(req.query, page, limit);
-    const openings = await openingService.getAllOpenings(filters, skip, meta.limit);
-    return apiResponse.success(res, 'Openings fetched', { openings }, meta);
+    const { openings, total } = await openingService.getAllOpenings(filters, skip, meta.limit);
+    return apiResponse.success(res, 'Openings fetched', { openings }, { ...meta, total });
   }),
 
   getPopular: asyncHandler(async (req, res) => {

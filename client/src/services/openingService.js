@@ -8,7 +8,13 @@ import api from './api';
 const unwrap = (res) => res.data.data;
 
 export const getAll = (params) =>
-  api.get('/openings', { params }).then(unwrap);
+  api.get('/openings', { params }).then((res) => {
+    console.log('getAll response data:', res.data);
+    return {
+      ...res.data.data,
+      totalCount: res.data.meta?.total,
+    };
+  });
 
 export const getPopular = () =>
   api.get('/openings/popular').then(unwrap);

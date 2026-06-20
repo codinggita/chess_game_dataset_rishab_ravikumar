@@ -3,7 +3,12 @@ const Opening = require('../models/Opening');
 const openingService = {
   getAllOpenings: async (filters = {}, skip = 0, limit = 10) => {
     const { page, ...dbFilters } = filters;
-    return await Opening.find({ ...dbFilters }).sort({ totalGames: -1 }).skip(skip).limit(limit);
+    const query = { ...dbFilters };
+    const [openings, total] = await Promise.all([
+      Opening.find(query).sort({ totalGames: -1 }).skip(skip).limit(limit),
+      Opening.countDocuments(query),
+    ]);
+    return { openings, total };
   },
 
   getPopularOpenings: async (filters = {}) => {
