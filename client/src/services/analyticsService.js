@@ -5,7 +5,7 @@
 
 import api from './api';
 
-const unwrapData = (res) => res.data.data;
+const unwrapData = (res) => res.data.data.data;
 
 export const getVictoryDistribution = async () => {
   const res = await api.get('/analytics/victory-distribution');

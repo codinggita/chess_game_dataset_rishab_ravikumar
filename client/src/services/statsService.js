@@ -59,12 +59,14 @@ export const getWhiteWinRate = async () => {
 
 export const getBlackWinRate = async () => {
   const res = await api.get('/stats/black-win-rate');
-  return unwrapData(res);
+  const rate = unwrapData(res).rate;
+  return parseFloat(rate);
 };
 
 export const getDrawRate = async () => {
   const res = await api.get('/stats/draw-rate');
-  return unwrapData(res);
+  const rate = unwrapData(res).rate;
+  return parseFloat(rate);
 };
 
 export const getRatedGames = async () => {
