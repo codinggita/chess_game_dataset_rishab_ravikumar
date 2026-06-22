@@ -19,13 +19,13 @@ export const getUser = (id) =>
   api.get(`/admin/users/${id}`).then(unwrap);
 
 export const updateRole = (id, role) =>
-  api.put(`/admin/users/${id}/role`, { role }).then(unwrap);
+  api.patch(`/admin/users/${id}/role`, { role }).then(unwrap);
 
 export const banUser = (id) =>
-  api.put(`/admin/users/${id}/ban`).then(unwrap);
+  api.patch(`/admin/users/${id}/ban`).then(unwrap);
 
 export const unbanUser = (id) =>
-  api.put(`/admin/users/${id}/unban`).then(unwrap);
+  api.patch(`/admin/users/${id}/unban`).then(unwrap);
 
 /* ── Match Moderation ── */
 export const getDeletedMatches = () =>
@@ -45,10 +45,13 @@ export const getSystemHealth = () =>
   api.get('/system/health').then(unwrap);
 
 export const clearCache = () =>
-  api.post('/system/clear-cache').then(unwrap);
+  api.delete('/admin/cache/clear').then(unwrap);
 
 export const getPerformance = () =>
   api.get('/system/performance').then(unwrap);
 
 export const getStorage = () =>
   api.get('/system/storage').then(unwrap);
+
+export const getDatabaseStatus = () =>
+  api.get('/system/database/status').then(unwrap);
